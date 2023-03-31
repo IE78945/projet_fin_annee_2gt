@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917356997320",
+    "project_id": "projet-fin-anne-2gt",
+    "storage_bucket": "projet-fin-anne-2gt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917356997320:android:30cb5413beeea9d71893fd",
+        "android_client_info": {
+          "package_name": "com.example.projet_fin_annee_2gt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917356997320-bf1le9m89k85vqt2ob1uv8u9gqopannu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmeSu2UR4s5h9Yebk0TG4Y_uTwIS7sLYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917356997320-bf1le9m89k85vqt2ob1uv8u9gqopannu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
