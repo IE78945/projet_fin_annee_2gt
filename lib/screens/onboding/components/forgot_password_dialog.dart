@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'forgot_password_form.dart';
 
-import 'sign_in_form.dart';
-
-void showSignInCustomDialog(BuildContext context, {required ValueChanged onValue}) {
+void showForgotPasswordCustomDialog(BuildContext context, {required ValueChanged onValue}) {
 
   showGeneralDialog(
     context: context,
@@ -13,7 +12,7 @@ void showSignInCustomDialog(BuildContext context, {required ValueChanged onValue
     pageBuilder: (_, __, ___) {
       return Center(
         child: Container(
-          height: 530,
+          height: 440,
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
@@ -41,7 +40,7 @@ void showSignInCustomDialog(BuildContext context, {required ValueChanged onValue
                   Column(
                     children: [
                       const Text(
-                        "Sign in",
+                        "Forgot Password",
                         style: TextStyle(
                           fontSize: 34,
                           fontFamily: "Poppins",
@@ -55,7 +54,7 @@ void showSignInCustomDialog(BuildContext context, {required ValueChanged onValue
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      const SignInForm(),
+                      const ForgotPasswordForm(),
 
                     ],
                   ),

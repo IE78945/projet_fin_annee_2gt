@@ -13,7 +13,7 @@ void showSignUpCustomDialog(BuildContext context, {required ValueChanged onValue
     pageBuilder: (_, __, ___) {
       return Center(
         child: Container(
-          height: 540,
+          height: 586,
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
           decoration: BoxDecoration(
@@ -62,7 +62,7 @@ void showSignUpCustomDialog(BuildContext context, {required ValueChanged onValue
                   const Positioned(
                     left: 0,
                     right: 0,
-                    bottom: -48,
+                    bottom: -50,
 
                     child: CircleAvatar(
                       radius: 16,

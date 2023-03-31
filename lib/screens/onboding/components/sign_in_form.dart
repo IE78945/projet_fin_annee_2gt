@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
+import 'package:projet_fin_annee_2gt/screens/onboding/components/forgot_password_dialog.dart';
 import 'package:rive/rive.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
 
@@ -22,6 +23,7 @@ class _SignInFormState extends State<SignInForm> {
   late TextEditingController _PasswordController = TextEditingController();
   late TextEditingController _phoneController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
+  bool isShowForgotPasswordDialog = false;
 
 
   bool isShowLoading = false;
@@ -206,7 +208,6 @@ class _SignInFormState extends State<SignInForm> {
                 ),
 
                 // password
-
                 const Text(
                   "Password",
                   style: TextStyle(
@@ -251,14 +252,29 @@ class _SignInFormState extends State<SignInForm> {
                 ),
 
                 //forgot password
-
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 8),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: (){
-
+                        //show forgot password dialog
+                        Future.delayed(
+                          const Duration(milliseconds: 800),
+                              () {
+                            setState(() {
+                              isShowForgotPasswordDialog = true;
+                            });
+                            showForgotPasswordCustomDialog(
+                              context,
+                              onValue: (_) {
+                                setState(() {
+                                  isShowForgotPasswordDialog = false;
+                                });
+                              },
+                            );
+                          },
+                        );
                       },
                       child: Text("Forgot password?",style: TextStyle(
                         color: Colors.black54,
