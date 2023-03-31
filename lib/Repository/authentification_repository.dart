@@ -33,11 +33,11 @@ class AuthentificationRepository extends GetxController {
       return true;
     }on FirebaseAuthException catch(e){
       switch(e.code){
-        case 'weak-password':print('Please enter a stronger password');
-        case 'invalid-email':print('Email is not valid or badly formatted');
-        case 'email-already-in-use':print('An account already exists for that email');
-        case 'operation-not-allowed':print('Operation is not allowed. Please contact support.');
-        case 'user-disabled':print('This user has been disabled. Please contact support for help.');
+        case 'weak-password':print('Please enter a stronger password');break;
+        case 'invalid-email':print('Email is not valid or badly formatted');break;
+        case 'email-already-in-use':print('An account already exists for that email');break;
+        case 'operation-not-allowed':print('Operation is not allowed. Please contact support.');break;
+        case 'user-disabled':print('This user has been disabled. Please contact support for help.');break;
         default:print('An unknown error occurred');
       }
       return false;
@@ -47,11 +47,13 @@ class AuthentificationRepository extends GetxController {
     }
   }
 
-  Future<void> LoginUserWithEmailAndPassword(String email, String password) async {
+  Future<bool> LoginUserWithEmailAndPassword(String email, String password) async {
     try{
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return true;
     }on FirebaseAuthException catch(e){
-    }catch(_){}
+      return false;
+    }catch(_){return false;}
   }
 
    Future<void> logout() async => await _auth.signOut();

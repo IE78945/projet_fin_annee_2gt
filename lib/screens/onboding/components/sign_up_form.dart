@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
+import 'package:projet_fin_annee_2gt/model/user_mode.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:rive/rive.dart';
 
@@ -17,7 +21,10 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final userRepo = Get.put(UserRepository());
 
   late Stream<TruecallerSdkCallback>? _stream;
   late TextEditingController _PasswordController = TextEditingController();
@@ -96,36 +103,56 @@ class _SignUpFormState extends State<SignUpForm> {
                 String phNo = truecallerSdkCallback.profile!.phoneNumber;
                 print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
 
-                // Create user in firebase
-                Future<bool> test;
-                test = AuthentificationRepository.instance.CreateUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
+                // Create user in firebase authentication
+                Future<bool> isFirebaseAuthentificationAccountCreated;
+                isFirebaseAuthentificationAccountCreated = AuthentificationRepository.instance.CreateUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
 
-                if (await test) {
-                  // show success animation
-                  success.fire();
-                  Future.delayed(
-                    const Duration(seconds: 2),
-                        () {
-                      setState(() {
-                        isShowLoading = false;
-                      });
-                      confetti.fire();
-                      // Navigate & hide confetti
-                      Future.delayed(const Duration(seconds: 1), () {
-                        // Navigator.pop(context);
+                if (await isFirebaseAuthentificationAccountCreated) {
+                  //if user has been created successfully in firebase authentication
+                  //Store user in firestore
+                  final user = UserModel(firstName: firstName, email: _emailController.text.trim(), phoneNo: phNo);
+                  Future<bool> isFireStoreAccountCreated = userRepo.createUser(user);
+                  //if user data has been stored in firestore successfully
+                  if(await isFireStoreAccountCreated ) {
+                    // show success animation
+                    success.fire();
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                          () {
+                        setState(() {
+                          isShowLoading = false;
+                        });
+                        confetti.fire();
+                        // Navigate & hide confetti
+                        Future.delayed(const Duration(seconds: 1), () {
+                          // Navigator.pop(context);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EntryPoint(),
-                          ),
-                        );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EntryPoint(),
+                            ),
+                          );
 
 
 
-                      });
-                    },
-                  );
+                        });
+                      },
+                    );
+                  }
+                  else {
+                    // show failure animation
+                    error.fire();
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                          () {
+                        setState(() {
+                          isShowLoading = false;
+                        });
+                        reset.fire();
+                      },
+                    );
+                  }
                 }
                 else {
                   // show failure animation

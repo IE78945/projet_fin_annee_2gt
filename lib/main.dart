@@ -5,15 +5,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
 
+import 'Repository/user_repository.dart';
 import 'firebase_options.dart';
 
 
 void main() {
-
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(AuthentificationRepository()));
-
   runApp(const MyApp());
 }
 

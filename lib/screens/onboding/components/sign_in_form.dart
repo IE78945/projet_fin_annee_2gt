@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:rive/rive.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
@@ -80,31 +81,52 @@ class _SignInFormState extends State<SignInForm> {
                 String? lastName = truecallerSdkCallback.profile!.lastName;
                 String phNo = truecallerSdkCallback.profile!.phoneNumber;
                 print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
-                // show success animation
-                success.fire();
-                Future.delayed(
-                  const Duration(seconds: 2),
-                      () {
-                    setState(() {
-                      isShowLoading = false;
-                    });
-                    confetti.fire();
-                    // Navigate & hide confetti
-                    Future.delayed(const Duration(seconds: 1), () {
-                      // Navigator.pop(context);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EntryPoint(),
-                        ),
-                      );
+                // Create user in firebase
+                Future<bool> test;
+                test = AuthentificationRepository.instance.LoginUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
+
+                if (await test) {
+                  // show success animation
+                  success.fire();
+                  Future.delayed(
+                    const Duration(seconds: 2),
+                        () {
+                      setState(() {
+                        isShowLoading = false;
+                      });
+                      confetti.fire();
+                      // Navigate & hide confetti
+                      Future.delayed(const Duration(seconds: 1), () {
+                        // Navigator.pop(context);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EntryPoint(),
+                          ),
+                        );
 
 
 
-                    });
-                  },
-                );
+                      });
+                    },
+                  );
+                }
+                else {
+                  // show failure animation
+                  error.fire();
+                  Future.delayed(
+                    const Duration(seconds: 2),
+                        () {
+                      setState(() {
+                        isShowLoading = false;
+                      });
+                      reset.fire();
+                    },
+                  );
+                }
+
                 break;
 
               case TruecallerSdkCallbackResult.failure:
