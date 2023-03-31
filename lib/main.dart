@@ -9,7 +9,7 @@ import 'Repository/user_repository.dart';
 import 'firebase_options.dart';
 
 
-void main() {
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(AuthentificationRepository()));
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'The Flutter Way',
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFFEEF1F8),

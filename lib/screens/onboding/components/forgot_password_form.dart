@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
+import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
 import 'package:rive/rive.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
@@ -60,40 +62,53 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     });
     Future.delayed(
       const Duration(seconds: 1),
-          () {
+          () async {
         if (_formKey.currentState!.validate()) {
           //si les champs sont validées alors ...
+          Future<bool>test = AuthentificationRepository.instance.ForgotPassword(_emailController.text.trim());
+          if (await test){
+            // show success animation
+            success.fire();
+            Future.delayed(
+              const Duration(seconds: 2),
+                  () {
+                setState(() {
+                  isShowLoading = false;
+                });
+                confetti.fire();
+                // Navigate & hide confetti
+                Future.delayed(const Duration(seconds: 1), () {
+                  // Navigator.pop(context);
 
-          // show success animation
-          success.fire();
-          Future.delayed(
-            const Duration(seconds: 2),
-                () {
-              setState(() {
-                isShowLoading = false;
-              });
-              confetti.fire();
-              // Navigate & hide confetti
-              Future.delayed(const Duration(seconds: 1), () {
-                // Navigator.pop(context);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EntryPoint(),
-                  ),
-                );
-
-
-
-              });
-            },
-          );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OnboardingScreen(),
+                    ),
+                  );
 
 
+
+                });
+              },
+            );
+          }
+          else {
+            //show failure animation
+            error.fire();
+            Future.delayed(
+              const Duration(seconds: 2),
+                  () {
+                setState(() {
+                  isShowLoading = false;
+                });
+                reset.fire();
+              },
+            );
+          }
         }
         else {
-          //show failuare animation
+          //show failure animation
           error.fire();
           Future.delayed(
             const Duration(seconds: 2),

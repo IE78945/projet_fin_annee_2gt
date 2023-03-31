@@ -23,6 +23,8 @@ class AuthentificationRepository extends GetxController {
   }
 
    _setInitialScreen(User? user) {
+    print("------------------------------------------");
+    print(user);
       user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
     }
 
@@ -52,7 +54,17 @@ class AuthentificationRepository extends GetxController {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       return true;
     }on FirebaseAuthException catch(e){
+      print(e.message);
       return false;
+    }catch(_){
+      return false;}
+  }
+
+  Future<bool> ForgotPassword(String email) async {
+    try{
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
+    }on FirebaseAuthException catch(e){ return false;
     }catch(_){return false;}
   }
 
