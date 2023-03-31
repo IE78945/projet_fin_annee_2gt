@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:rive/rive.dart';
+import 'package:truecaller_sdk/truecaller_sdk.dart';
 
 
 class SignInForm extends StatefulWidget {
@@ -49,7 +50,8 @@ class _SignInFormState extends State<SignInForm> {
     confetti = controller.findInput<bool>("Trigger explosion") as SMITrigger;
   }
 
-  void singIn(BuildContext context) {
+  void signIn(BuildContext context) {
+
     // confetti.fire();
     setState(() {
       isShowConfetti = true;
@@ -57,33 +59,82 @@ class _SignInFormState extends State<SignInForm> {
     });
     Future.delayed(
       const Duration(seconds: 1),
-      () {
+          () {
         if (_formKey.currentState!.validate()) {
-          success.fire();
-          Future.delayed(
-            const Duration(seconds: 2),
-            () {
-              setState(() {
-                isShowLoading = false;
-              });
-              confetti.fire();
-              // Navigate & hide confetti
-              Future.delayed(const Duration(seconds: 1), () {
-                // Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EntryPoint(),
-                  ),
+          //si les champs sont validées alors vérifier phone number and devise
+          TruecallerSdk.initializeSDK(sdkOptions: TruecallerSdkScope.SDK_OPTION_WITH_OTP);
+          TruecallerSdk.isUsable.then((isUsable) {
+            if (isUsable) {
+              TruecallerSdk.getProfile;
+            } else {
+              final snackBar = SnackBar(content: Text("Not Usable"));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              print("***Not usable***");
+            }
+          });
+          TruecallerSdk.streamCallbackData.listen((truecallerSdkCallback) async {
+            switch (truecallerSdkCallback.result) {
+            //If Truecaller user and has Truecaller app on his device, you'd directly get the Profile
+              case TruecallerSdkCallbackResult.success:
+                String firstName = truecallerSdkCallback.profile!.firstName;
+                String? lastName = truecallerSdkCallback.profile!.lastName;
+                String phNo = truecallerSdkCallback.profile!.phoneNumber;
+                print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
+                // show success animation
+                success.fire();
+                Future.delayed(
+                  const Duration(seconds: 2),
+                      () {
+                    setState(() {
+                      isShowLoading = false;
+                    });
+                    confetti.fire();
+                    // Navigate & hide confetti
+                    Future.delayed(const Duration(seconds: 1), () {
+                      // Navigator.pop(context);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EntryPoint(),
+                        ),
+                      );
+
+
+
+                    });
+                  },
                 );
-              });
-            },
-          );
-        } else {
+                break;
+
+              case TruecallerSdkCallbackResult.failure:
+                String errorCode = truecallerSdkCallback.error!.message.toString();
+                print("--------------------------------NO!"+errorCode.toString());
+                error.fire();
+                Future.delayed(
+                  const Duration(seconds: 2),
+                      () {
+                    setState(() {
+                      isShowLoading = false;
+                    });
+                    reset.fire();
+                  },
+                );
+                break;
+
+              default:
+                print("Invalid result 2 ");
+            }
+          });
+
+
+        }
+        else {
+          //show failuare animation
           error.fire();
           Future.delayed(
             const Duration(seconds: 2),
-            () {
+                () {
               setState(() {
                 isShowLoading = false;
               });
@@ -105,30 +156,6 @@ class _SignInFormState extends State<SignInForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Phone",
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _phoneController,
-                    validator: (value) {
-                      if (value!.isEmpty ||!RegExp(r'^[2-9]\d{7}$').hasMatch(value)) {
-                        return "Please enter a valid phone number";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 0, 8, 0),
-                        child: SvgPicture.asset("assets/icons/phone.svg"),
-                      ),
-                    ),
-                  ),
-                ),
 
                 //Email
                 const Text(
@@ -156,6 +183,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 ),
 
+                // password
 
                 const Text(
                   "Password",
@@ -199,7 +227,9 @@ class _SignInFormState extends State<SignInForm> {
                     ),
                   ),
                 ),
+
                 //forgot password
+
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 8),
                   child: Align(
@@ -221,7 +251,7 @@ class _SignInFormState extends State<SignInForm> {
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      singIn(context);
+                      signIn(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF77D8E),
