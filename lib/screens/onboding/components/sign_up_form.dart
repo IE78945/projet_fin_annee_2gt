@@ -84,7 +84,11 @@ class _SignUpFormState extends State<SignUpForm> {
           () {
         if (_formKey.currentState!.validate()) {
           //si les champs sont validées alors vérifier phone number and devise
-          TruecallerSdk.initializeSDK(sdkOptions: TruecallerSdkScope.SDK_OPTION_WITH_OTP);
+          TruecallerSdk.initializeSDK(
+              sdkOptions: TruecallerSdkScope.SDK_OPTION_WITH_OTP,
+              footerType: TruecallerSdkScope.FOOTER_TYPE_NONE,
+              buttonColor: 0xFFF77D8E,
+          );
           TruecallerSdk.isUsable.then((isUsable) {
             if (isUsable) {
               TruecallerSdk.getProfile;

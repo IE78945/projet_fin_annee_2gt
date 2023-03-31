@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 
 import '../../model/course.dart';
 import 'components/course_card.dart';
@@ -17,6 +18,9 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
+              MaterialButton(onPressed: (){
+                AuthentificationRepository.instance.logout();
+              },child: Text("log out"),),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(

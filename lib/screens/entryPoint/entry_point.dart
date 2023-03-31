@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
 import 'package:projet_fin_annee_2gt/screens/home/home_screen.dart';
 import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
@@ -69,6 +70,7 @@ class _EntryPointState extends State<EntryPoint>
       backgroundColor: backgroundColor2,
       body: Stack(
         children: [
+
           AnimatedPositioned(
             width: 288,
             height: MediaQuery.of(context).size.height,

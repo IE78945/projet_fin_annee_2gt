@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../screens/entryPoint/entry_point.dart';
 import '../screens/onboding/onboding_screen.dart';
@@ -23,25 +24,37 @@ class AuthentificationRepository extends GetxController {
   }
 
    _setInitialScreen(User? user) {
-    print("------------------------------------------");
-    print(user);
-      user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+    user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
     }
 
   Future<bool> CreateUserWithEmailAndPassword(String email, String password) async {
     try{
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      //firebaseUser.value != null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+      Get.snackbar(
+        "success",
+        "Your account has been created",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.green,
+      );
       return true;
     }on FirebaseAuthException catch(e){
+      String error="";
       switch(e.code){
-        case 'weak-password':print('Please enter a stronger password');break;
-        case 'invalid-email':print('Email is not valid or badly formatted');break;
-        case 'email-already-in-use':print('An account already exists for that email');break;
-        case 'operation-not-allowed':print('Operation is not allowed. Please contact support.');break;
-        case 'user-disabled':print('This user has been disabled. Please contact support for help.');break;
+        case 'weak-password': error ='Please enter a stronger password';break;
+        case 'invalid-email': error ='Email is not valid or badly formatted';break;
+        case 'email-already-in-use': error ='An account already exists for that email';break;
+        case 'operation-not-allowed': error ='Operation is not allowed. Please contact support.';break;
+        case 'user-disabled': error ='This user has been disabled. Please contact support for help.';break;
         default:print('An unknown error occurred');
       }
+      Get.snackbar(
+        "Error",
+        error,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.red,
+      );
       return false;
     }catch(_){
       print('An unknown error occurred');
