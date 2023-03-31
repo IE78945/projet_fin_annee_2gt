@@ -343,7 +343,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     label: const Text("Sign Up"),
                   ),
                 ),
-                
+
               ],
             ),
           ),
