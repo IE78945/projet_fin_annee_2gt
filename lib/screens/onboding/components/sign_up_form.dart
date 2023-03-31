@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:rive/rive.dart';
 
@@ -62,6 +63,8 @@ class _SignUpFormState extends State<SignUpForm> {
     confetti = controller.findInput<bool>("Trigger explosion") as SMITrigger;
   }
 
+
+
   void signUp(BuildContext context) {
 
     // confetti.fire();
@@ -92,31 +95,52 @@ class _SignUpFormState extends State<SignUpForm> {
                 String? lastName = truecallerSdkCallback.profile!.lastName;
                 String phNo = truecallerSdkCallback.profile!.phoneNumber;
                 print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
-                // show success animation
-                success.fire();
-                Future.delayed(
-                  const Duration(seconds: 2),
-                      () {
-                    setState(() {
-                      isShowLoading = false;
-                    });
-                    confetti.fire();
-                    // Navigate & hide confetti
-                    Future.delayed(const Duration(seconds: 1), () {
-                      // Navigator.pop(context);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EntryPoint(),
-                        ),
-                      );
+                // Create user in firebase
+                Future<bool> test;
+                test = AuthentificationRepository.instance.CreateUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
+
+                if (await test) {
+                  // show success animation
+                  success.fire();
+                  Future.delayed(
+                    const Duration(seconds: 2),
+                        () {
+                      setState(() {
+                        isShowLoading = false;
+                      });
+                      confetti.fire();
+                      // Navigate & hide confetti
+                      Future.delayed(const Duration(seconds: 1), () {
+                        // Navigator.pop(context);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EntryPoint(),
+                          ),
+                        );
 
 
 
-                    });
-                  },
-                );
+                      });
+                    },
+                  );
+                }
+                else {
+                  // show failure animation
+                  error.fire();
+                  Future.delayed(
+                    const Duration(seconds: 2),
+                        () {
+                      setState(() {
+                        isShowLoading = false;
+                      });
+                      reset.fire();
+                    },
+                  );
+                }
+
                 break;
 
               case TruecallerSdkCallbackResult.failure:
@@ -168,58 +192,6 @@ class _SignUpFormState extends State<SignUpForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //User Name
-                const Text(
-                  "Name",
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _UserNameController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter your username";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 0, 8, 0),
-                        child: SvgPicture.asset("assets/icons/phone.svg"),
-                      ),
-                    ),
-                  ),
-                ),
-
-                //Phone Number
-                const Text(
-                  "Phone",
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    keyboardType: TextInputType.phone,
-                    controller: _phoneController,
-                    validator: (value) {
-                      if (value!.isEmpty ||!RegExp(r'^[2-9]\d{7}$').hasMatch(value)) {
-                        return "Please enter a valid phone number";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 0, 8, 0),
-                        child: SvgPicture.asset("assets/icons/phone.svg"),
-                      ),
-                    ),
-                  ),
-                ),
 
                 //Email
                 const Text(

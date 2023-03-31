@@ -38,6 +38,9 @@ dependencies:
   flutter_svg: ^1.1.6
   flutter_otp_text_field: ^1.1.1
   truecaller_sdk: ^0.1.2
+  firebase_core: ^2.9.0
+  get: ^4.6.5
+  firebase_auth: ^4.4.0
 
 
 dev_dependencies:
