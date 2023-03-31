@@ -65,9 +65,22 @@ class AuthentificationRepository extends GetxController {
   Future<bool> LoginUserWithEmailAndPassword(String email, String password) async {
     try{
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      Get.snackbar(
+        "success",
+        "Logged in successfully",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.green,
+      );
       return true;
     }on FirebaseAuthException catch(e){
-      print(e.message);
+      Get.snackbar(
+        "Error",
+        e.code,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.red,
+      );
       return false;
     }catch(_){
       return false;}
@@ -76,10 +89,34 @@ class AuthentificationRepository extends GetxController {
   Future<bool> ForgotPassword(String email) async {
     try{
       await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar(
+        "success",
+        "Check your email to restore your password",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.green,
+      );
       return true;
-    }on FirebaseAuthException catch(e){ return false;
+    }on FirebaseAuthException catch(e){
+      Get.snackbar(
+        "Error",
+        e.code,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white.withOpacity(0.7),
+        colorText: Colors.red,
+      );
+      return false;
     }catch(_){return false;}
   }
 
-   Future<void> logout() async => await _auth.signOut();
+   Future<void> logout() async {
+     await _auth.signOut();
+     Get.snackbar(
+       "success",
+       "Logged out successfully",
+       snackPosition: SnackPosition.TOP,
+       backgroundColor: Colors.white.withOpacity(0.7),
+       colorText: Colors.green,
+     );
+   }
  }
