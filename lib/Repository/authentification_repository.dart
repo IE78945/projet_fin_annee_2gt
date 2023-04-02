@@ -76,7 +76,7 @@ class AuthentificationRepository extends GetxController {
     }on FirebaseAuthException catch(e){
       Get.snackbar(
         "Error",
-        e.code,
+        e.message.toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.white.withOpacity(0.7),
         colorText: Colors.red,
@@ -100,7 +100,7 @@ class AuthentificationRepository extends GetxController {
     }on FirebaseAuthException catch(e){
       Get.snackbar(
         "Error",
-        e.code,
+        e.message.toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.white.withOpacity(0.7),
         colorText: Colors.red,

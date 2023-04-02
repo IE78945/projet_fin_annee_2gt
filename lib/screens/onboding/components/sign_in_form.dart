@@ -65,7 +65,11 @@ class _SignInFormState extends State<SignInForm> {
           () {
         if (_formKey.currentState!.validate()) {
           //si les champs sont validées alors vérifier phone number and devise
-          TruecallerSdk.initializeSDK(sdkOptions: TruecallerSdkScope.SDK_OPTION_WITH_OTP);
+          TruecallerSdk.initializeSDK(
+              sdkOptions: TruecallerSdkScope.SDK_OPTION_WITH_OTP,
+              footerType: TruecallerSdkScope.FOOTER_TYPE_NONE,
+              buttonColor: 0xFFF77D8E,
+          );
           TruecallerSdk.isUsable.then((isUsable) {
             if (isUsable) {
               TruecallerSdk.getProfile;
@@ -79,44 +83,65 @@ class _SignInFormState extends State<SignInForm> {
             switch (truecallerSdkCallback.result) {
             //If Truecaller user and has Truecaller app on his device, you'd directly get the Profile
               case TruecallerSdkCallbackResult.success:
-                String firstName = truecallerSdkCallback.profile!.firstName;
-                String? lastName = truecallerSdkCallback.profile!.lastName;
-                String phNo = truecallerSdkCallback.profile!.phoneNumber;
-                print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
+                {
+                    String firstName = truecallerSdkCallback.profile!.firstName;
+                  String? lastName = truecallerSdkCallback.profile!.lastName;
+                  String phNo = truecallerSdkCallback.profile!.phoneNumber;
+                  print("**********************************firstName: " +
+                      firstName + "\t phNO:" + phNo);
 
-                // Create user in firebase
-                Future<bool> test;
-                test = AuthentificationRepository.instance.LoginUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
+                  // login user in firebase
+                  Future<bool> test;
+                  test = AuthentificationRepository.instance
+                      .LoginUserWithEmailAndPassword(_emailController.text.trim(),
+                      _PasswordController.text.trim());
 
-                if (await test) {
-                  // show success animation
-                  success.fire();
-                  Future.delayed(
-                    const Duration(seconds: 2),
-                        () {
-                      setState(() {
-                        isShowLoading = false;
-                      });
-                      confetti.fire();
-                      // Navigate & hide confetti
-                      Future.delayed(const Duration(seconds: 1), () {
-                        // Navigator.pop(context);
+                  if (await test) {
+                    // show success animation
+                    success.fire();
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                          () {
+                        setState(() {
+                          isShowLoading = false;
+                        });
+                        confetti.fire();
+                        // Navigate & hide confetti
+                        Future.delayed(const Duration(seconds: 1), () {
+                          // Navigator.pop(context);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EntryPoint(),
-                          ),
-                        );
-
-
-
-                      });
-                    },
-                  );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EntryPoint(),
+                            ),
+                          );
+                        });
+                      },
+                    );
+                  }
+                  else {
+                    // show failure animation
+                    error.fire();
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                          () {
+                        setState(() {
+                          isShowLoading = false;
+                        });
+                        reset.fire();
+                      },
+                    );
+                  }
                 }
-                else {
-                  // show failure animation
+                break;
+
+              case TruecallerSdkCallbackResult.failure:
+                {
+                  String errorCode = truecallerSdkCallback.error!.message
+                      .toString();
+                  print("--------------------------------NO!" +
+                      errorCode.toString());
                   error.fire();
                   Future.delayed(
                     const Duration(seconds: 2),
@@ -128,22 +153,6 @@ class _SignInFormState extends State<SignInForm> {
                     },
                   );
                 }
-
-                break;
-
-              case TruecallerSdkCallbackResult.failure:
-                String errorCode = truecallerSdkCallback.error!.message.toString();
-                print("--------------------------------NO!"+errorCode.toString());
-                error.fire();
-                Future.delayed(
-                  const Duration(seconds: 2),
-                      () {
-                    setState(() {
-                      isShowLoading = false;
-                    });
-                    reset.fire();
-                  },
-                );
                 break;
 
               default:

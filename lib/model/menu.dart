@@ -1,3 +1,5 @@
+import 'package:rive/rive.dart';
+
 import 'rive_model.dart';
 
 class Menu {
@@ -62,32 +64,32 @@ List<Menu> bottomNavItems = [
         artboard: "CHAT",
         stateMachineName: "CHAT_Interactivity"),
   ),
+
   Menu(
-    title: "Search",
+    title: "Commercial",
+    rive: RiveModel(
+        src: "assets/RiveAssets/little_icons.riv",
+        artboard: "SIGNOUT",
+        stateMachineName: "state_machine"),
+  ),
+
+
+  Menu(
+    title: "Technique",
     rive: RiveModel(
         src: "assets/RiveAssets/icons.riv",
-        artboard: "SEARCH",
-        stateMachineName: "SEARCH_Interactivity"),
+        artboard: "SETTINGS",
+        stateMachineName: "SETTINGS_Interactivity"),
   ),
+
   Menu(
-    title: "Timer",
+    title: "LogOut",
     rive: RiveModel(
-        src: "assets/RiveAssets/icons.riv",
-        artboard: "TIMER",
-        stateMachineName: "TIMER_Interactivity"),
+        src: "assets/RiveAssets/icons_5.riv",
+        artboard: "EXIT",
+        stateMachineName: "exitstate",
+        //status: SMIBool.fromValue(false),
+        ),
   ),
-  Menu(
-    title: "Notification",
-    rive: RiveModel(
-        src: "assets/RiveAssets/icons.riv",
-        artboard: "BELL",
-        stateMachineName: "BELL_Interactivity"),
-  ),
-  Menu(
-    title: "Profile",
-    rive: RiveModel(
-        src: "assets/RiveAssets/icons.riv",
-        artboard: "USER",
-        stateMachineName: "USER_Interactivity"),
-  ),
+
 ];

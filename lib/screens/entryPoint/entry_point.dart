@@ -3,7 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
+import 'package:projet_fin_annee_2gt/screens/LogOut/logout_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/commercial/commercial_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/home/home_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/technical/technical_screen.dart';
 import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
 
@@ -13,7 +17,7 @@ import 'components/menu_btn.dart';
 import 'components/side_bar.dart';
 
 class EntryPoint extends StatefulWidget {
-  const EntryPoint({super.key});
+  const EntryPoint({Key? key}) : super(key: key);
 
   @override
   State<EntryPoint> createState() => _EntryPointState();
@@ -36,9 +40,19 @@ class _EntryPointState extends State<EntryPoint>
     }
   }
 
+
+  GotoPage(){
+    if (pageIndex ==  0) return ChatScreen();
+    else if (pageIndex ==  1) return TechnicalScreen();
+    else if (pageIndex ==  2) return CommercialScreen();
+  }
+
+
   late AnimationController _animationController;
   late Animation<double> scalAnimation;
   late Animation<double> animation;
+
+  late int pageIndex = 0;
 
   @override
   void initState() {
@@ -90,11 +104,11 @@ class _EntryPointState extends State<EntryPoint>
               offset: Offset(animation.value * 265, 0),
               child: Transform.scale(
                 scale: scalAnimation.value,
-                child: const ClipRRect(
+                child:  ClipRRect(
                   borderRadius: BorderRadius.all(
                     Radius.circular(24),
                   ),
-                  child: HomePage(),
+                  child: GotoPage(),
                 ),
               ),
             ),
@@ -164,10 +178,18 @@ class _EntryPointState extends State<EntryPoint>
                       press: () {
                         RiveUtils.chnageSMIBoolState(navBar.rive.status!);
                         updateSelectedBtmNav(navBar);
+                        switch (index){
+                          case 0 : pageIndex = 0;break;
+                          case 1 : pageIndex = 1;break;
+                          case 2 : pageIndex = 2;break;
+                          case 3 : pageIndex = 3 ; AuthentificationRepository.instance.logout();break;
+                          default: print ("Noooooooooooooooooooooooooooooooo");break;
+                        }
                       },
                       riveOnInit: (artboard) {
                         navBar.rive.status = RiveUtils.getRiveInput(artboard,
                             stateMachineName: navBar.rive.stateMachineName);
+
                       },
                       selectedNav: selectedBottonNav,
                     );

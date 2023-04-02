@@ -102,22 +102,30 @@ class _SignUpFormState extends State<SignUpForm> {
             switch (truecallerSdkCallback.result) {
             //If Truecaller user and has Truecaller app on his device, you'd directly get the Profile
               case TruecallerSdkCallbackResult.success:
-                String firstName = truecallerSdkCallback.profile!.firstName;
+                {String firstName = truecallerSdkCallback.profile!.firstName;
                 String? lastName = truecallerSdkCallback.profile!.lastName;
                 String phNo = truecallerSdkCallback.profile!.phoneNumber;
-                print("**********************************firstName: "+firstName+"\t phNO:"+phNo);
+                print("**********************************firstName: " +
+                    firstName + "\t phNO:" + phNo);
 
                 // Create user in firebase authentication
                 Future<bool> isFirebaseAuthentificationAccountCreated;
-                isFirebaseAuthentificationAccountCreated = AuthentificationRepository.instance.CreateUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
+                isFirebaseAuthentificationAccountCreated =
+                    AuthentificationRepository.instance
+                        .CreateUserWithEmailAndPassword(
+                        _emailController.text.trim(),
+                        _PasswordController.text.trim());
 
                 if (await isFirebaseAuthentificationAccountCreated) {
                   //if user has been created successfully in firebase authentication
                   //Store user in firestore
-                  final user = UserModel(firstName: firstName, email: _emailController.text.trim(), phoneNo: phNo);
-                  Future<bool> isFireStoreAccountCreated = userRepo.createUser(user);
+                  final user = UserModel(firstName: firstName,
+                      email: _emailController.text.trim(),
+                      phoneNo: phNo);
+                  Future<bool> isFireStoreAccountCreated = userRepo.createUser(
+                      user);
                   //if user data has been stored in firestore successfully
-                  if(await isFireStoreAccountCreated ) {
+                  if (await isFireStoreAccountCreated) {
                     // show success animation
                     success.fire();
                     Future.delayed(
@@ -137,9 +145,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               builder: (context) => const EntryPoint(),
                             ),
                           );
-
-
-
                         });
                       },
                     );
@@ -171,22 +176,26 @@ class _SignUpFormState extends State<SignUpForm> {
                     },
                   );
                 }
-
+                }
                 break;
 
               case TruecallerSdkCallbackResult.failure:
-                String errorCode = truecallerSdkCallback.error!.message.toString();
-                print("--------------------------------NO!"+errorCode.toString());
-                error.fire();
-                Future.delayed(
-                  const Duration(seconds: 2),
-                      () {
-                    setState(() {
-                      isShowLoading = false;
-                    });
-                    reset.fire();
-                  },
-                );
+                {
+                  String errorCode = truecallerSdkCallback.error!.message
+                      .toString();
+                  print("--------------------------------NO!" +
+                      errorCode.toString());
+                  error.fire();
+                  Future.delayed(
+                    const Duration(seconds: 2),
+                        () {
+                      setState(() {
+                        isShowLoading = false;
+                      });
+                      reset.fire();
+                    },
+                  );
+                }
                 break;
 
               default:
