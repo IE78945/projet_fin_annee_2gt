@@ -3,10 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
-import 'package:projet_fin_annee_2gt/screens/LogOut/logout_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/commercial/commercial_screen.dart';
-import 'package:projet_fin_annee_2gt/screens/home/home_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/technical/technical_screen.dart';
 import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
@@ -182,7 +181,14 @@ class _EntryPointState extends State<EntryPoint>
                           case 0 : pageIndex = 0;break;
                           case 1 : pageIndex = 1;break;
                           case 2 : pageIndex = 2;break;
-                          case 3 : pageIndex = 3 ; AuthentificationRepository.instance.logout();break;
+                          case 3 : pageIndex = 3 ; {AuthentificationRepository.instance.logout();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OnboardingScreen(),
+                            ),
+                          );
+                          };break;
                           default: print ("Noooooooooooooooooooooooooooooooo");break;
                         }
                       },

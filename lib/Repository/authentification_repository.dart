@@ -2,9 +2,11 @@
 import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_fin_annee_2gt/firebase_options.dart';
 import '../screens/entryPoint/entry_point.dart';
 import '../screens/onboding/onboding_screen.dart';
 
@@ -15,17 +17,22 @@ class AuthentificationRepository extends GetxController {
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
   var verificationId = ''.obs;
+  static bool isFirstTimeOpeningApp = true;
 
   @override
   void onReady() {
-    firebaseUser = Rx<User?>(_auth.currentUser);
-    firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
+      firebaseUser = Rx<User?>(_auth.currentUser);
+      firebaseUser.bindStream(_auth.userChanges());
+      ever(firebaseUser, _setInitialScreen);
   }
 
    _setInitialScreen(User? user) {
-    user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+    if(isFirstTimeOpeningApp){
+      isFirstTimeOpeningApp = false;
+      user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+
     }
+  }
 
   Future<bool> CreateUserWithEmailAndPassword(String email, String password) async {
     try{

@@ -10,6 +10,26 @@ class TechnicalScreen extends StatefulWidget {
 class _TechnicalScreenState extends State<TechnicalScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: SafeArea(
+        bottom: false,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  "Technical Services",
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

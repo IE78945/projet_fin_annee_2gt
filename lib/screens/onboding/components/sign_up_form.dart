@@ -180,23 +180,19 @@ class _SignUpFormState extends State<SignUpForm> {
                 break;
 
               case TruecallerSdkCallbackResult.failure:
-                {
-                  String errorCode = truecallerSdkCallback.error!.message
-                      .toString();
-                  print("--------------------------------NO!" +
-                      errorCode.toString());
-                  error.fire();
-                  Future.delayed(
-                    const Duration(seconds: 2),
-                        () {
-                      setState(() {
-                        isShowLoading = false;
-                      });
-                      reset.fire();
-                    },
-                  );
-                }
-                break;
+                {String errorCode = truecallerSdkCallback.error!.message.toString();
+                print("--------------------------------NO!"+errorCode.toString());
+                error.fire();
+                Future.delayed(
+                  const Duration(seconds: 2),
+                      () {
+                    setState(() {
+                      isShowLoading = false;
+                    });
+                    reset.fire();
+                  },
+                );
+                }break;
 
               default:
                 print("Invalid result 2 ");
