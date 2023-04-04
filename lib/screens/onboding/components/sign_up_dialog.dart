@@ -51,7 +51,7 @@ void showSignUpCustomDialog(BuildContext context, {required ValueChanged onValue
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         child: Text(
-                          "Access to 240+ hours of content. Learn design and code, by building real apps with Flutter and Swift.",
+                          "Thank you for using our app to report network problems! Your reports help us keep our network running smoothly. To continue , please sign up.",
                           textAlign: TextAlign.center,
                         ),
                       ),

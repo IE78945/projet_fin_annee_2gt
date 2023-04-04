@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
+import 'package:projet_fin_annee_2gt/model/user_model.dart';
 
 import '../../../model/menu.dart';
 import '../../../utils/rive_utils.dart';
@@ -6,14 +11,27 @@ import 'info_card.dart';
 import 'side_menu.dart';
 
 class SideBar extends StatefulWidget {
-  const SideBar({super.key});
+  SideBar({super.key});
 
   @override
   State<SideBar> createState() => _SideBarState();
+
 }
+// Get user email from firebase athentification and pass it to fetch user details
+
 
 class _SideBarState extends State<SideBar> {
+  final _authRepo = Get.put(AuthentificationRepository());
+  final _userRepo = Get.put(UserRepository());
   Menu selectedSideMenu = sidebarMenus.first;
+
+  getUserData(){
+    final email = _authRepo.firebaseUser.value?.email;
+    if (email!= null){
+      return _userRepo.getUserDetails(email);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,9 +49,28 @@ class _SideBarState extends State<SideBar> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const InfoCard(
-                name: "Abu Anwar",
-                bio: "YouTuber",
+              FutureBuilder(
+                future: getUserData(),
+                builder: (context,snapshot){
+                  if (snapshot.connectionState == ConnectionState.done){
+                    if (snapshot.hasData){
+                      UserModel userData = snapshot.data as UserModel;
+                      return InfoCard(
+                        name: userData.firstName,
+                        bio: userData.phoneNo,
+                      );
+                    }
+                    else return InfoCard(
+                      name: "User Name",
+                      bio: "User Number",
+                    );
+                  }
+                  else return InfoCard(
+                    name: "User Name",
+                    bio: "User Number",
+                  );
+                  },
+
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
@@ -64,13 +101,14 @@ class _SideBarState extends State<SideBar> {
               Padding(
                 padding: const EdgeInsets.only(left: 24, top: 40, bottom: 16),
                 child: Text(
-                  "History".toUpperCase(),
+                  "Account".toUpperCase(),
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
                       .copyWith(color: Colors.white70),
                 ),
               ),
+
               ...sidebarMenus2
                   .map((menu) => SideMenu(
                         menu: menu,
@@ -87,6 +125,8 @@ class _SideBarState extends State<SideBar> {
                         },
                       ))
                   .toList(),
+
+
             ],
           ),
         ),

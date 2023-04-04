@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projet_fin_annee_2gt/model/menu.dart';
 import 'package:rive/rive.dart';
 
-import '../../../model/menu.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu(

@@ -86,17 +86,18 @@ class _SignInFormState extends State<SignInForm> {
                 {
                     String firstName = truecallerSdkCallback.profile!.firstName;
                   String? lastName = truecallerSdkCallback.profile!.lastName;
+                  //Get device phone number
                   String phNo = truecallerSdkCallback.profile!.phoneNumber;
                   print("**********************************firstName: " +
                       firstName + "\t phNO:" + phNo);
 
                   // login user in firebase
-                  Future<bool> test;
-                  test = AuthentificationRepository.instance
+                  Future<bool> isLoggedIn;
+                  isLoggedIn = AuthentificationRepository.instance
                       .LoginUserWithEmailAndPassword(_emailController.text.trim(),
                       _PasswordController.text.trim());
 
-                  if (await test) {
+                  if (await isLoggedIn) {
                     // show success animation
                     success.fire();
                     Future.delayed(

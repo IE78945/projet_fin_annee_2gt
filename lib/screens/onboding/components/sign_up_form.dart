@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
-import 'package:projet_fin_annee_2gt/model/user_mode.dart';
+import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:rive/rive.dart';
 

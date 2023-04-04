@@ -80,7 +80,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Column(
                         children: const [
                           Text(
-                            "Learn design & code",
+                            "Optimize Your Network",
                             style: TextStyle(
                               fontSize: 60,
                               fontWeight: FontWeight.w700,
@@ -90,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            "Don’t skip design. Learn design and code, by building real apps with Flutter and Swift. Complete courses about the best tools.",
+                            "Using our app is easy! Simply provide your location and a brief description of the problem you're experiencing, and we'll take care of the rest. ",
                           ),
                         ],
                       ),
@@ -152,7 +152,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Text(
-                          "Purchase includes access to 30+ courses, 240+ premium tutorials, 120+ hours of videos, source files and certificates."),
+                          "Your privacy and security are our top priorities.We will never share your personal information with third parties."),
                     )
                   ],
                 ),

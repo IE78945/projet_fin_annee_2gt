@@ -50,7 +50,7 @@ void showForgotPasswordCustomDialog(BuildContext context, {required ValueChanged
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         child: Text(
-                          "Access to 240+ hours of content. Learn design and code, by building real apps with Flutter and Swift.",
+                          "Don't worry! Stuff happens. Just enter your email addess below and we'll send you a link to restart your password.",
                           textAlign: TextAlign.center,
                         ),
                       ),
