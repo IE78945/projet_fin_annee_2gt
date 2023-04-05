@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TechnicalScreen extends StatefulWidget {
   const TechnicalScreen({Key? key}) : super(key: key);
@@ -8,6 +9,18 @@ class TechnicalScreen extends StatefulWidget {
 }
 
 class _TechnicalScreenState extends State<TechnicalScreen> {
+
+  static const CellInfoChannel = MethodChannel('com.example.projet_fin_annee_2gt/cell_info');
+  String cellInfo ="";
+  Future GetPhoneData() async{
+    final arguments = {'RX' :'1'};
+    final int newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
+    setState(() {
+      cellInfo = '$newCellInfo' ;
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +39,18 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
               ),
+              Text(
+                cellInfo,
+              ),
+              MaterialButton(
+                  onPressed: () => GetPhoneData(),
+                  child: Text("Parameters"),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
 }
