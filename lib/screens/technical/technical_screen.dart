@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,11 +16,10 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
   String cellInfo ="";
   Future GetPhoneData() async{
     final arguments = {'RX' :'1'};
-    final int newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
+    final Map<dynamic,dynamic> newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
     setState(() {
       cellInfo = '$newCellInfo' ;
     });
-
   }
 
   @override

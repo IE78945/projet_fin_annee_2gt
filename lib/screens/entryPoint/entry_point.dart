@@ -42,8 +42,8 @@ class _EntryPointState extends State<EntryPoint>
 
   GotoPage(){
     if (pageIndex ==  0) return ChatScreen();
-    else if (pageIndex ==  1) return TechnicalScreen();
-    else if (pageIndex ==  2) return CommercialScreen();
+    else if (pageIndex ==  1) return CommercialScreen();
+    else if (pageIndex ==  2) return TechnicalScreen();
   }
 
 
