@@ -12,9 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Bundle
 import android.telephony.*
-import android.telephony.gsm.GsmCellLocation
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 
@@ -22,13 +20,7 @@ import android.telephony.CellInfo
 import android.telephony.CellInfoGsm
 import android.telephony.CellInfoWcdma
 import android.telephony.CellInfoLte
-import android.telephony.CellSignalStrengthGsm
-import android.telephony.CellSignalStrengthWcdma
-import android.telephony.CellSignalStrengthLte
 import android.telephony.TelephonyManager
-import android.telephony.PhysicalChannelConfig
-import android.telephony.ServiceState
-import android.telephony.SubscriptionManager
 
 
 class MainActivity: FlutterFragmentActivity() {
@@ -42,17 +34,17 @@ class MainActivity: FlutterFragmentActivity() {
             // This method is invoked on the main thread.
             // TODO
             if (call.method == "getCellInfo"){
-                val arguments = call.arguments<Map<String,String>>()
-                val  name = arguments?.get("RX")
+                val arguments = call.arguments<Map<String,Int>>()
+                val  NumSim = arguments?.get("RX")
                 
-                val cellInfo = getInfo()
+                val cellInfo = getInfo(NumSim)
                 result.success(cellInfo)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    private fun getInfo(): HashMap<String,String>{
+    private fun getInfo(NumSim: Int?): HashMap<String,String>{
         // Creating the HashMap
         val info: HashMap<String,String> = HashMap()
         val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
@@ -69,7 +61,7 @@ class MainActivity: FlutterFragmentActivity() {
         }
         else {
             //if permissions granted
-            val cellInfo = tm.allCellInfo?.get(0)
+            val cellInfo = tm.allCellInfo?.get(NumSim!!)
             println(cellInfo)
             if (cellInfo is CellInfoGsm) { if (cellInfo != null ) {
                 val cellIdentity = cellInfo.cellIdentity

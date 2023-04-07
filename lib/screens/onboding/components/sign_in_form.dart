@@ -25,10 +25,11 @@ class _SignInFormState extends State<SignInForm> {
   late TextEditingController _emailController = TextEditingController();
   bool isShowForgotPasswordDialog = false;
 
+  bool _isObscure = true;
 
   bool isShowLoading = false;
   bool isShowConfetti = false;
-  bool _isObscure = true;
+
   late SMITrigger error;
   late SMITrigger success;
   late SMITrigger reset;

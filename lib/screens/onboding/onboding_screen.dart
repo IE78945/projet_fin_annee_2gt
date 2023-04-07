@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rive/rive.dart';
 
 import 'components/animated_btn.dart';
@@ -33,9 +34,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       autoplay: false,
     );
     super.initState();
+    initPlatformState();
   }
 
-  @override
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    // Ask for permissions before requesting data
+    await [
+      Permission.phone,
+      Permission.location,
+    ].request();
+  }
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
