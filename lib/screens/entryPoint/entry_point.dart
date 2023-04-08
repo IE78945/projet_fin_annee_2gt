@@ -1,8 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
+import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/commercial/commercial_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
@@ -13,8 +17,10 @@ import 'package:rive/rive.dart';
 import '../../model/menu.dart';
 import 'components/MenuIndex.dart';
 import 'components/btm_nav_item.dart';
+import 'components/info_card.dart';
 import 'components/menu_btn.dart';
 import 'components/side_bar.dart';
+import 'components/side_menu.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({Key? key}) : super(key: key);
@@ -31,6 +37,10 @@ class _EntryPointState extends State<EntryPoint>
   Menu selectedSideMenu = sidebarMenus.first;
 
   late SMIBool isMenuOpenInput;
+
+  final _authRepo = Get.put(AuthentificationRepository());
+  final _userRepo = Get.put(UserRepository());
+
 
   void updateSelectedBtmNav(Menu menu) {
     if (selectedBottonNav != menu) {
@@ -56,6 +66,12 @@ class _EntryPointState extends State<EntryPoint>
     else if (pageIndex ==  2) return TechnicalScreen();
   }
 
+  getUserData(){
+    final email = _authRepo.firebaseUser.value?.email;
+    if (email!= null){
+      return _userRepo.getUserDetails(email);
+    }
+  }
 
   late AnimationController _animationController;
   late Animation<double> scalAnimation;
@@ -101,7 +117,108 @@ class _EntryPointState extends State<EntryPoint>
             curve: Curves.fastOutSlowIn,
             left: isSideBarOpen ? 0 : -288,
             top: 0,
-            child: SideBar(),
+            child: Container(
+              width: 288,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xFF17203A),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
+                ),
+              ),
+              child: DefaultTextStyle(
+                style: const TextStyle(color: Colors.white),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FutureBuilder(
+                      future: getUserData(),
+                      builder: (context,snapshot){
+                        if (snapshot.connectionState == ConnectionState.done){
+                          if (snapshot.hasData){
+                            UserModel userData = snapshot.data as UserModel;
+                            return InfoCard(
+                              name: userData.firstName,
+                              phone: userData.phoneNo,
+                            );
+                          }
+                          else return InfoCard(
+                            name: "User Name",
+                            phone: "User Number",
+                          );
+                        }
+                        else return InfoCard(
+                          name: "User Name",
+                          phone: "User Number",
+                        );
+                      },
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
+                      child: Text(
+                        "Browse".toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: Colors.white70),
+                      ),
+                    ),
+                    ...sidebarMenus
+                        .map((menu) => SideMenu(
+                      menu: menu,
+                      selectedMenu: selectedSideMenu,
+                      press: () {
+                        RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                        setState(() {
+                          selectedSideMenu = menu;
+                          switch (selectedSideMenu.index){
+                            case 0 : pageIndex = 0;break;
+                            case 1 : pageIndex = 1;break;
+                            case 2 : pageIndex = 2;break;
+                            default: print ("Noooooooooooooooooooooooooooooooo");break;
+                          }
+                        });
+                      },
+                      riveOnInit: (artboard) {
+                        menu.rive.status = RiveUtils.getRiveInput(artboard,
+                            stateMachineName: menu.rive.stateMachineName);
+                      },
+                    ))
+                        .toList(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24, top: 40, bottom: 16),
+                      child: Text(
+                        "Account".toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: Colors.white70),
+                      ),
+                    ),
+
+                    ...sidebarMenus2
+                        .map((menu) => SideMenu(
+                      menu: menu,
+                      selectedMenu: selectedSideMenu,
+                      press: () {
+                        RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                        setState(() {
+                          selectedSideMenu = menu;
+                        });
+                      },
+                      riveOnInit: (artboard) {
+                        menu.rive.status = RiveUtils.getRiveInput(artboard,
+                            stateMachineName: menu.rive.stateMachineName);
+                      },
+                    ))
+                        .toList(),
+
+
+                  ],
+                ),
+              ),
+            ),
           ),
           Transform(
             alignment: Alignment.center,
