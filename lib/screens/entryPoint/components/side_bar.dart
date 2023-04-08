@@ -57,19 +57,19 @@ class _SideBarState extends State<SideBar> {
                       UserModel userData = snapshot.data as UserModel;
                       return InfoCard(
                         name: userData.firstName,
-                        bio: userData.phoneNo,
+                        phone: userData.phoneNo,
                       );
                     }
                     else return InfoCard(
                       name: "User Name",
-                      bio: "User Number",
+                      phone: "User Number",
                     );
                   }
                   else return InfoCard(
                     name: "User Name",
-                    bio: "User Number",
+                   phone: "User Number",
                   );
-                  },
+                },
 
               ),
               Padding(
@@ -84,19 +84,19 @@ class _SideBarState extends State<SideBar> {
               ),
               ...sidebarMenus
                   .map((menu) => SideMenu(
-                        menu: menu,
-                        selectedMenu: selectedSideMenu,
-                        press: () {
-                          RiveUtils.chnageSMIBoolState(menu.rive.status!);
-                          setState(() {
-                            selectedSideMenu = menu;
-                          });
-                        },
-                        riveOnInit: (artboard) {
-                          menu.rive.status = RiveUtils.getRiveInput(artboard,
-                              stateMachineName: menu.rive.stateMachineName);
-                        },
-                      ))
+                menu: menu,
+                selectedMenu: selectedSideMenu,
+                press: () {
+                  RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                  setState(() {
+                    selectedSideMenu = menu;
+                  });
+                },
+                riveOnInit: (artboard) {
+                  menu.rive.status = RiveUtils.getRiveInput(artboard,
+                      stateMachineName: menu.rive.stateMachineName);
+                },
+              ))
                   .toList(),
               Padding(
                 padding: const EdgeInsets.only(left: 24, top: 40, bottom: 16),
@@ -111,19 +111,19 @@ class _SideBarState extends State<SideBar> {
 
               ...sidebarMenus2
                   .map((menu) => SideMenu(
-                        menu: menu,
-                        selectedMenu: selectedSideMenu,
-                        press: () {
-                          RiveUtils.chnageSMIBoolState(menu.rive.status!);
-                          setState(() {
-                            selectedSideMenu = menu;
-                          });
-                        },
-                        riveOnInit: (artboard) {
-                          menu.rive.status = RiveUtils.getRiveInput(artboard,
-                              stateMachineName: menu.rive.stateMachineName);
-                        },
-                      ))
+                menu: menu,
+                selectedMenu: selectedSideMenu,
+                press: () {
+                  RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                  setState(() {
+                    selectedSideMenu = menu;
+                  });
+                },
+                riveOnInit: (artboard) {
+                  menu.rive.status = RiveUtils.getRiveInput(artboard,
+                      stateMachineName: menu.rive.stateMachineName);
+                },
+              ))
                   .toList(),
 
 

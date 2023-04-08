@@ -299,8 +299,46 @@ class _SignInFormState extends State<SignInForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      signIn(context);
+                    onPressed: () async {
+                      //signIn(context);
+
+
+                      /*------------------------Just For Test -------------------*/
+                      // login user in firebase
+                      Future<bool> isLoggedIn;
+                      isLoggedIn = AuthentificationRepository.instance
+                          .LoginUserWithEmailAndPassword(_emailController.text.trim(),
+                          _PasswordController.text.trim());
+
+                      if (await isLoggedIn) {
+                        Future.delayed(
+                          const Duration(seconds: 2),
+                              () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const EntryPoint(),
+                                  ),
+                                );
+
+                          },
+                        );
+                      }
+                      else {
+                        // show failure animation
+                        error.fire();
+                        Future.delayed(
+                          const Duration(seconds: 2),
+                              () {
+                            setState(() {
+                              isShowLoading = false;
+                            });
+                            reset.fire();
+                          },
+                        );
+                      }
+                      /*---------------------------------------------------------*/
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF77D8E),

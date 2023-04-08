@@ -11,6 +11,7 @@ import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
 
 import '../../model/menu.dart';
+import 'components/MenuIndex.dart';
 import 'components/btm_nav_item.dart';
 import 'components/menu_btn.dart';
 import 'components/side_bar.dart';
@@ -39,8 +40,17 @@ class _EntryPointState extends State<EntryPoint>
     }
   }
 
+  int getVariable() {
+    return MySingleton().myVariable;
+  }
+
+  void setVariable(int value) {
+    MySingleton().myVariable = value;
+  }
 
   GotoPage(){
+    setVariable(pageIndex);
+    pageIndex = getVariable();
     if (pageIndex ==  0) return ChatScreen();
     else if (pageIndex ==  1) return CommercialScreen();
     else if (pageIndex ==  2) return TechnicalScreen();
@@ -51,7 +61,7 @@ class _EntryPointState extends State<EntryPoint>
   late Animation<double> scalAnimation;
   late Animation<double> animation;
 
-  late int pageIndex = 0;
+  late int pageIndex = getVariable();
 
   @override
   void initState() {

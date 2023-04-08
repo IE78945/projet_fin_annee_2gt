@@ -1,10 +1,11 @@
 import 'rive_model.dart';
 
 class Menu {
+  final int? index ;
   final String title;
   final RiveModel rive;
 
-  Menu({required this.title, required this.rive});
+  Menu({required this.title, required this.rive, this.index});
 }
 
 List<Menu> sidebarMenus = [
@@ -14,6 +15,7 @@ List<Menu> sidebarMenus = [
         src: "assets/RiveAssets/icons.riv",
         artboard: "CHAT",
         stateMachineName: "CHAT_Interactivity"),
+    index: 0,
   ),
 
   Menu(
@@ -22,6 +24,7 @@ List<Menu> sidebarMenus = [
         src: "assets/RiveAssets/little_icons.riv",
         artboard: "SIGNOUT",
         stateMachineName: "state_machine"),
+    index: 1,
   ),
 
 
@@ -31,6 +34,7 @@ List<Menu> sidebarMenus = [
         src: "assets/RiveAssets/icons.riv",
         artboard: "SETTINGS",
         stateMachineName: "SETTINGS_Interactivity"),
+    index: 2,
   ),
 ];
 
@@ -43,6 +47,7 @@ List<Menu> sidebarMenus2 = [
       stateMachineName: "exitstate",
       //status: SMIBool.fromValue(false),
     ),
+    index: 3,
   ),
 ];
 

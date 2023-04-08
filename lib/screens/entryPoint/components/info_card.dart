@@ -5,10 +5,10 @@ class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
     required this.name,
-    required this.bio,
+    required this.phone,
   }) : super(key: key);
 
-  final String name, bio;
+  final String name, phone;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class InfoCard extends StatelessWidget {
         style: const TextStyle(color: Colors.white),
       ),
       subtitle: Text(
-        bio,
+        phone,
         style: const TextStyle(color: Colors.white70),
       ),
     );
