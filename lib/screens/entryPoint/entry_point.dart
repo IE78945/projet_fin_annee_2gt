@@ -50,17 +50,26 @@ class _EntryPointState extends State<EntryPoint>
     }
   }
 
+  void updateSelectedSideNav(Menu menu) {
+    if (selectedSideMenu != menu) {
+      setState(() {
+        selectedSideMenu = menu;
+      });
+    }
+  }
+
+  /*
   int getVariable() {
     return MySingleton().myVariable;
   }
-
   void setVariable(int value) {
     MySingleton().myVariable = value;
   }
+  */
 
   GotoPage(){
-    setVariable(pageIndex);
-    pageIndex = getVariable();
+    //setVariable(pageIndex);
+    //pageIndex = getVariable();
     if (pageIndex ==  0) return ChatScreen();
     else if (pageIndex ==  1) return CommercialScreen();
     else if (pageIndex ==  2) return TechnicalScreen();
@@ -77,7 +86,7 @@ class _EntryPointState extends State<EntryPoint>
   late Animation<double> scalAnimation;
   late Animation<double> animation;
 
-  late int pageIndex = getVariable();
+  late int pageIndex =0;
 
   @override
   void initState() {
@@ -169,6 +178,7 @@ class _EntryPointState extends State<EntryPoint>
                       menu: menu,
                       selectedMenu: selectedSideMenu,
                       press: () {
+                        updateSelectedBtmNav(bottomNavItems[menu.index as int]);
                         RiveUtils.chnageSMIBoolState(menu.rive.status!);
                         setState(() {
                           selectedSideMenu = menu;
@@ -205,7 +215,15 @@ class _EntryPointState extends State<EntryPoint>
                         RiveUtils.chnageSMIBoolState(menu.rive.status!);
                         setState(() {
                           selectedSideMenu = menu;
+                          AuthentificationRepository.instance.logout();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OnboardingScreen(),
+                            ),
+                          );
                         });
+
                       },
                       riveOnInit: (artboard) {
                         menu.rive.status = RiveUtils.getRiveInput(artboard,
@@ -304,6 +322,7 @@ class _EntryPointState extends State<EntryPoint>
                       press: () {
                         RiveUtils.chnageSMIBoolState(navBar.rive.status!);
                         updateSelectedBtmNav(navBar);
+                        updateSelectedSideNav(sidebarMenus[index]);
                         switch (index){
                           case 0 : pageIndex = 0;break;
                           case 1 : pageIndex = 1;break;
