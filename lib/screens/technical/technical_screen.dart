@@ -6,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
+import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
+import 'package:projet_fin_annee_2gt/model/messages_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:rive/rive.dart';
 
@@ -24,10 +27,12 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
   final _authRepo = Get.put(AuthentificationRepository());
   final _userRepo = Get.put(UserRepository());
+  final chatRepo = Get.put(ChatRepository());
 
   final _SimList = ["SIM 1" , "SIM 2"];
   String _selectedSIM = "SIM 1";
   String cellInfo ="";
+  String generation ="";
   static const CellInfoChannel = MethodChannel('com.example.projet_fin_annee_2gt/cell_info');
 
   bool isShowLoading = false;
@@ -55,10 +60,10 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
     confetti = controller.findInput<bool>("Trigger explosion") as SMITrigger;
   }
 
-  getUserData(){
+  getUserData() async {
     final email = _authRepo.firebaseUser.value?.email;
     if (email!= null){
-      return _userRepo.getUserDetails(email);
+      return await _userRepo.getUserDetails(email);
     }
   }
 
@@ -91,25 +96,93 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                 String Latitude = position.latitude.toString();
                 String Altitude = position.altitude.toString();
 
+                //Get current userDetails
+                UserModel userData = await getUserData();
+
                 // Send data to firestore
-
-
-                // show success animation
-                success.fire();
-                Future.delayed(
-                  const Duration(seconds: 2),
-                      () {
-                    setState(() {
-                      isShowLoading = false;
-                    });
-                    confetti.fire();
-                    // Navigate & hide confetti
-                    Future.delayed(const Duration(seconds: 1), () {
-                      // Navigator.pop(context);
-                      // ........... do something
-                    });
-                  },
-                );
+                  //create new discussion
+                  final discussion = DiscussionModel(
+                    type: "Technical",
+                    lastMessage: _ReclamationController.value.text.trim(),
+                    lastMessageDate: DateTime.now(),
+                    lastMessageStatusAdmin: "not seen",
+                    lastMessageStatusUser: "seen",
+                    phoneNo: userData.phoneNo,
+                    userId: userData.id.toString(),
+                    generation: generation,
+                  );
+                  String DiscussionID = await chatRepo.createDiscussion(discussion);
+                  //if user data has been stored in firestore successfully
+                  if (DiscussionID !="") {
+                    //Discussion is created successfully
+                        // Add new message
+                        final message = MessageModel(senderId: userData.id.toString(), sentDate: DateTime.now(), message:  _ReclamationController.value.text.trim(), status: "not seen" ,phoneData: cellInfo);
+                        bool isMessageCreated = await chatRepo.addMessage(message, DiscussionID);
+                        if (isMessageCreated){
+                          // show success animation
+                          success.fire();
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                                () {
+                              setState(() {
+                                isShowLoading = false;
+                              });
+                              confetti.fire();
+                              // Navigate & hide confetti
+                              Future.delayed(const Duration(seconds: 1), () {
+                                // ................do something
+                              });
+                            },
+                          );
+                          Get.snackbar(
+                            "success",
+                            "Your reclamation has been sent successfully.",
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.white.withOpacity(0.7),
+                            colorText: Colors.green,
+                          );
+                        }
+                        else {
+                          // show failure animation
+                          error.fire();
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                                () {
+                              setState(() {
+                                isShowLoading = false;
+                              });
+                              reset.fire();
+                            },
+                          );
+                          Get.snackbar(
+                            "Error",
+                            "Something went wrong. Please retry later.",
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.white.withOpacity(0.7),
+                            colorText: Colors.red,
+                          );
+                        }
+                  }
+                  else {
+                    // show failure animation
+                    error.fire();
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                          () {
+                        setState(() {
+                          isShowLoading = false;
+                        });
+                        reset.fire();
+                      },
+                    );
+                    Get.snackbar(
+                      "Error",
+                      "Something went wrong. Please retry later.",
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: Colors.white.withOpacity(0.7),
+                      colorText: Colors.red,
+                    );
+                  }
               }
               else {
                 // location button is disabled
@@ -202,6 +275,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
     final Map<dynamic,dynamic> newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
     setState(() {
       cellInfo = '$newCellInfo' ;
+      generation = newCellInfo['phoneType'];
     });
   }
 

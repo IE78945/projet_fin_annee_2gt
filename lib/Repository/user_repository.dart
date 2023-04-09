@@ -12,7 +12,7 @@ class UserRepository extends GetxController{
   //Store user in firestore
   Future<bool> createUser(UserModel user) async {
     bool b = false;
-    await _db.collection("Users").add(user.toJason()).whenComplete(() => { b = true })
+    await _db.collection("Users").doc(user.id).set(user.toJason()).whenComplete(() => { b = true })
         .catchError((error, stackTrace){ print(error.toString()); b = false; });
     return b;
   }

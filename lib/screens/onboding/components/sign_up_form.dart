@@ -119,7 +119,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 if (await isFirebaseAuthentificationAccountCreated) {
                   //if user has been created successfully in firebase authentication
                   //Store user in firestore
-                  final user = UserModel(firstName: firstName,
+                  final user = UserModel(
+                      id: AuthentificationRepository.instance.firebaseUser.value?.uid,
+                      firstName: firstName,
                       email: _emailController.text.trim(),
                       phoneNo: phNo);
                   Future<bool> isFireStoreAccountCreated = userRepo.createUser(
