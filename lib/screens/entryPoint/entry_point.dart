@@ -327,7 +327,7 @@ class _EntryPointState extends State<EntryPoint>
                           case 0 : pageIndex = 0;break;
                           case 1 : pageIndex = 1;break;
                           case 2 : pageIndex = 2;break;
-                          case 3 : pageIndex = 3 ; {AuthentificationRepository.instance.logout();
+                          case 3 :  {AuthentificationRepository.instance.logout();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

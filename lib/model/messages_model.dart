@@ -6,7 +6,8 @@ class MessageModel {
   final DateTime sentDate;
   final String senderId;
   final String status;
-  final String? phoneData;
+  final Map? phoneData;
+  final GeoPoint? location;
 
   const MessageModel({
     this.id,
@@ -15,6 +16,7 @@ class MessageModel {
     required this.message,
     required this.status,
     this.phoneData,
+    this.location
   });
 
   toJason(){
@@ -24,6 +26,7 @@ class MessageModel {
       "Message" : message,
       "Status" : status,
       "PhoneData" : phoneData,
+      "Location" : location,
     };
   }
 
@@ -37,6 +40,7 @@ class MessageModel {
       message: data["Message"],
       status: data["Status"],
       phoneData: data["PhoneData"],
+      location: data["Location"],
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,11 +28,11 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
   final _authRepo = Get.put(AuthentificationRepository());
   final _userRepo = Get.put(UserRepository());
-  final chatRepo = Get.put(ChatRepository());
+  final _chatRepo = Get.put(ChatRepository());
 
   final _SimList = ["SIM 1" , "SIM 2"];
   String _selectedSIM = "SIM 1";
-  String cellInfo ="";
+  Map<String,String> cellInfo = new Map<String, String>();
   String generation ="";
   static const CellInfoChannel = MethodChannel('com.example.projet_fin_annee_2gt/cell_info');
 
@@ -93,8 +94,10 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                 await GetPhoneData();
                 // Get Location
                 Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                String Latitude = position.latitude.toString();
-                String Altitude = position.altitude.toString();
+                var Latitude = position.latitude;
+                var Longitude = position.longitude;
+                // Create a GeoPoint with latitude and longitude
+                GeoPoint point = GeoPoint(Latitude, Longitude);
 
                 //Get current userDetails
                 UserModel userData = await getUserData();
@@ -111,13 +114,20 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                     userId: userData.id.toString(),
                     generation: generation,
                   );
-                  String DiscussionID = await chatRepo.createDiscussion(discussion);
+                  String DiscussionID = await _chatRepo.createDiscussion(discussion);
                   //if user data has been stored in firestore successfully
                   if (DiscussionID !="") {
                     //Discussion is created successfully
                         // Add new message
-                        final message = MessageModel(senderId: userData.id.toString(), sentDate: DateTime.now(), message:  _ReclamationController.value.text.trim(), status: "not seen" ,phoneData: cellInfo);
-                        bool isMessageCreated = await chatRepo.addMessage(message, DiscussionID);
+                        final message = MessageModel(
+                            senderId: userData.id.toString(),
+                            sentDate: DateTime.now(),
+                            message:  _ReclamationController.value.text.trim(),
+                            status: "not seen" ,
+                            phoneData: cellInfo,
+                            location: point,
+                        );
+                        bool isMessageCreated = await _chatRepo.addMessage(message, DiscussionID);
                         if (isMessageCreated){
                           // show success animation
                           success.fire();
@@ -274,7 +284,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
     final Map<dynamic,dynamic> newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
     setState(() {
-      cellInfo = '$newCellInfo' ;
+      cellInfo = newCellInfo.cast<String, String>() ;
       generation = newCellInfo['phoneType'];
     });
   }
@@ -394,7 +404,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Text(
-                      cellInfo,
+                      cellInfo.toString(),
                     ),
                   ),
                   SizedBox(height: 60),

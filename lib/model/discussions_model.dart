@@ -37,9 +37,9 @@ class DiscussionModel {
     };
   }
 
-  //Map user fetched fromFirebase to UserModel
-  factory DiscussionModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document){
-    final data = document.data()!;
+  //Map discussion fetched fromFirebase to DiscussionModel
+  factory DiscussionModel.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> document){
+    final data = document.data();
     return DiscussionModel(
       id: document.id,
       type: data["Type"],
