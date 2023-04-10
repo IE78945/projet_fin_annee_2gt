@@ -36,6 +36,12 @@ List<Menu> sidebarMenus = [
         stateMachineName: "SETTINGS_Interactivity"),
     index: 2,
   ),
+
+  Menu(
+    index: 3,
+    rive: RiveModel(src: '', artboard: '', stateMachineName: ''),
+    title: '',
+  ),
 ];
 
 List<Menu> sidebarMenus2 = [

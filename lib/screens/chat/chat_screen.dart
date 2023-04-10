@@ -29,14 +29,13 @@ class _ChatScreenState extends State<ChatScreen> {
   getUserUid(){
     final uid = _authRepo.firebaseUser.value?.uid;
     if (uid!= null){
-      print(uid);
       return uid;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height * 0.7;
+    _height = MediaQuery.of(context).size.height * 0.75;
     _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
@@ -70,41 +69,42 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _conversationsListViewWidget() {
     return Builder(
-      builder: (context) {
-        getUserUid();
-        return Container(
-          height: _height,
-          width: _width,
-          child: StreamBuilder<List<DiscussionModel>>(
-              stream: _chatRepo.getUserDiscussion(getUserUid()),
-              builder: (context, snapshot) {
-                var _data = snapshot.data;
-                print(_data);
-                return snapshot.hasData?
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _data?.length,
-                      itemBuilder: (_context, _index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+        builder: (context) {
+          getUserUid();
+          return Container(
+            height: _height,
+            width: _width,
+            child: StreamBuilder<List<DiscussionModel>>(
+                stream: _chatRepo.getUserDiscussion(getUserUid()),
+                builder: (context, snapshot) {
+                  var _data = snapshot.data;
+                  return snapshot.hasData ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _data?.length,
+                    itemBuilder: (_context, _index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Card(
+                          color: Color(0xFF6792FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color:Color(0xFF6792FF), width: 2),
+                          ),
                           child: ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Colors.black, width: 2),
-                            ),
+                            textColor: Colors.white,
                             onTap: () {},
                             title: Text(_data![_index].type),
                             subtitle: Text(_data![_index].lastMessage),
                             trailing: _listTileTrailingWidgets(_data![_index].lastMessageDate),
                           ),
-                        );
-                      },
-                ):
-                    Text("No data");
-              }
-          ),
-        );
-      }
+                        ),
+                      );
+                    },
+                  ) : Text("No data");
+                }
+            ),
+          );
+        }
     );
   }
 

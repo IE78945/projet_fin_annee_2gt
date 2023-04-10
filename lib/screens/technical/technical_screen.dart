@@ -354,7 +354,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                             },
                             icon: const Icon(
                               Icons.arrow_drop_down_outlined,
-                              color: const Color(0xFFF77D8E),
+                              color: Color(0xFF6792FF),
                             ),
                           ),
                         ),
@@ -383,7 +383,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                               send(context);
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF77D8E),
+                              backgroundColor: Color(0xFF6792FF),
                               minimumSize: const Size(double.infinity, 56),
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
