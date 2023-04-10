@@ -27,31 +27,12 @@ class ChatRepository extends GetxController{
         .catchError((error, stackTrace){ print(error.toString()); b = false; });
     return b;
   }
-/*
+
   // Fetch User discussions in firestore
-Future<Stream<List<DiscussionModel>>> getUserDiscussion(String _userId) async {
-  var _ref = _db.collection("Chats").where("UserId",isEqualTo: _userId);
-
-  /*
-  return _ref.snapshots().map((_snapshot){
-      List<DiscussionModel> d = _snapshot.docs.map((e) => DiscussionModel.fromSnapshot(e)).toList();
-      return  d;
-    });
-  */
-
-
-
-}
-*/
-
-  Stream<List<DiscussionModel>> getChatsStream(String _userId) {
-    print ("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+  Stream<List<DiscussionModel>> getUserDiscussion(String _userId) {
     var _ref = _db.collection("Chats").where("UserId",isEqualTo: _userId);
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
-            print(doc.data());
-            print(DiscussionModel.fromSnapshot(doc));
-            print("---------");
             return DiscussionModel.fromSnapshot(doc);
       }).toList();
     });

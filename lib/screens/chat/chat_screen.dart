@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,6 +8,7 @@ import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
 import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -74,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
           height: _height,
           width: _width,
           child: StreamBuilder<List<DiscussionModel>>(
-              stream: _chatRepo.getChatsStream(getUserUid()),
+              stream: _chatRepo.getUserDiscussion(getUserUid()),
               builder: (context, snapshot) {
                 var _data = snapshot.data;
                 print(_data);
@@ -91,9 +93,9 @@ class _ChatScreenState extends State<ChatScreen> {
                               side: BorderSide(color: Colors.black, width: 2),
                             ),
                             onTap: () {},
-                            title: Text("Type"),
-                            subtitle: Text("Last Message"),
-                            trailing: _listTileTrailingWidgets(),
+                            title: Text(_data![_index].type),
+                            subtitle: Text(_data![_index].lastMessage),
+                            trailing: _listTileTrailingWidgets(_data![_index].lastMessageDate),
                           ),
                         );
                       },
@@ -107,14 +109,14 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
 
-  Widget _listTileTrailingWidgets() {
+  Widget _listTileTrailingWidgets(DateTime _lastMessageTimestamp) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Text(
-          "Date",
+          timeago.format(_lastMessageTimestamp),
           style: TextStyle(fontSize: 15),
         ),
        Container(

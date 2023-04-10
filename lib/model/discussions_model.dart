@@ -40,17 +40,23 @@ class DiscussionModel {
   //Map discussion fetched fromFirebase to DiscussionModel
   factory DiscussionModel.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> document){
     final data = document.data();
-    return DiscussionModel(
-      id: document.id,
-      type: data["Type"],
-      lastMessage: data["LastMessage"],
-      lastMessageDate: data["LastMessageDate"],
-      lastMessageStatusAdmin: data["LastMessageStatusAdmin"],
-      lastMessageStatusUser: data["LastMessageStatusUser"],
-      generation: data["Generation"],
-      phoneNo: data["Phone"],
-      userId: data["UserId"],
-    );
+    try{
+      return DiscussionModel(
+        id: document.id,
+        type: data["Type"],
+        lastMessage: data["LastMessage"],
+        lastMessageDate: data["LastMessageDate"].toDate(),
+        lastMessageStatusAdmin: data["LastMessageStatusAdmin"],
+        lastMessageStatusUser: data["LastMessageStatusUser"],
+        generation: data["Generation"],
+        phoneNo: data["Phone"],
+        userId: data["UserId"],
+      );
+    } catch(e){
+      print("Error creating DiscussionModel from snapshot: $e");
+      rethrow;
+    }
+
   }
 
 }
