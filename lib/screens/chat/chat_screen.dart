@@ -22,6 +22,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final _authRepo = Get.put(AuthentificationRepository());
   final _chatRepo = Get.put(ChatRepository());
 
+  late double _height ;
+  late double _width;
 
   getUserUid(){
     final uid = _authRepo.firebaseUser.value?.uid;
@@ -32,6 +34,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _height = MediaQuery.of(context).size.height * 0.75;
+    _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -50,7 +54,6 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                     padding: EdgeInsets.only(right: 20,left: 20),
                       child: Container(
-
                         child: _conversationsListViewWidget(),
                       ),
                 ),
@@ -66,6 +69,8 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context) {
           getUserUid();
           return Container(
+            height: _height,
+            width: _width,
             child: StreamBuilder<List<DiscussionModel>>(
                 stream: _chatRepo.getUserDiscussion(getUserUid()),
                 builder: (context, snapshot) {

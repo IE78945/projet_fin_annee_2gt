@@ -307,10 +307,10 @@ class _SignInFormState extends State<SignInForm> {
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      signIn(context);
+                      //signIn(context);
 
 
-                      /*
+
                       /*------------------------Just For Test -------------------*/
                       // login user in firebase
                       Future<bool> isLoggedIn;
@@ -346,7 +346,7 @@ class _SignInFormState extends State<SignInForm> {
                         );
                       }
                       /*---------------------------------------------------------*/
-                       */
+
 
                     },
                     style: ElevatedButton.styleFrom(

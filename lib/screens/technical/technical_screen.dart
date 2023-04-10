@@ -142,12 +142,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                               // Navigate & hide confetti
                               Future.delayed(const Duration(seconds: 1), () {
                                 // ................do something
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ChatScreen(),
-                                  ),
-                                );
+
 
                               });
                             },
