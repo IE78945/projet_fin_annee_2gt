@@ -20,7 +20,7 @@ class AnimatedBtn extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        height: 64,
+        height: MediaQuery.of(context).size.height *0.17,
         width: MediaQuery.of(context).size.width *0.4,
         child: Stack(
           children: [

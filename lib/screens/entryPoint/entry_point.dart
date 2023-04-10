@@ -13,13 +13,10 @@ import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/technical/technical_screen.dart';
 import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
-
 import '../../model/menu.dart';
-import 'components/MenuIndex.dart';
 import 'components/btm_nav_item.dart';
 import 'components/info_card.dart';
 import 'components/menu_btn.dart';
-import 'components/side_bar.dart';
 import 'components/side_menu.dart';
 
 class EntryPoint extends StatefulWidget {
@@ -58,18 +55,7 @@ class _EntryPointState extends State<EntryPoint>
     }
   }
 
-  /*
-  int getVariable() {
-    return MySingleton().myVariable;
-  }
-  void setVariable(int value) {
-    MySingleton().myVariable = value;
-  }
-  */
-
   GotoPage(){
-    //setVariable(pageIndex);
-    //pageIndex = getVariable();
     if (pageIndex ==  0) return ChatScreen();
     else if (pageIndex ==  1) return CommercialScreen();
     else if (pageIndex ==  2) return TechnicalScreen();
@@ -138,90 +124,92 @@ class _EntryPointState extends State<EntryPoint>
               child: DefaultTextStyle(
                 style: const TextStyle(color: Colors.white),
                 child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FutureBuilder(
-                        future: getUserData(),
-                        builder: (context,snapshot){
-                            UserModel userData = snapshot.data as UserModel;
-                            return InfoCard(
-                            name: userData.firstName,
-                            phone: userData.phoneNo,
-                            );
-                            }
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
-                        child: Text(
-                          "Browse".toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: Colors.white70),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FutureBuilder(
+                          future: getUserData(),
+                          builder: (context,snapshot){
+                              UserModel userData = snapshot.data as UserModel;
+                              return InfoCard(
+                              name: userData.firstName,
+                              phone: userData.phoneNo,
+                              );
+                              }
                         ),
-                      ),
-                      ...sidebarMenus
-                          .map((menu) => SideMenu(
-                        menu: menu,
-                        selectedMenu: selectedSideMenu,
-                        press: () {
-                          updateSelectedBtmNav(bottomNavItems[menu.index as int]);
-                          RiveUtils.chnageSMIBoolState(menu.rive.status!);
-                          setState(() {
-                            selectedSideMenu = menu;
-                            switch (selectedSideMenu.index){
-                              case 0 : pageIndex = 0;break;
-                              case 1 : pageIndex = 1;break;
-                              case 2 : pageIndex = 2;break;
-                              default: print ("Noooooooooooooooooooooooooooooooo");break;
-                            }
-                          });
-                        },
-                        riveOnInit: (artboard) {
-                          menu.rive.status = RiveUtils.getRiveInput(artboard,
-                              stateMachineName: menu.rive.stateMachineName);
-                        },
-                      ))
-                          .toList(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 24, top: 40, bottom: 16),
-                        child: Text(
-                          "Account".toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: Colors.white70),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),
+                          child: Text(
+                            "Browse".toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: Colors.white70),
+                          ),
                         ),
-                      ),
+                        ...sidebarMenus
+                            .map((menu) => SideMenu(
+                          menu: menu,
+                          selectedMenu: selectedSideMenu,
+                          press: () {
+                            updateSelectedBtmNav(bottomNavItems[menu.index as int]);
+                            RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                            setState(() {
+                              selectedSideMenu = menu;
+                              switch (selectedSideMenu.index){
+                                case 0 : pageIndex = 0;break;
+                                case 1 : pageIndex = 1;break;
+                                case 2 : pageIndex = 2;break;
+                                default: print ("Noooooooooooooooooooooooooooooooo");break;
+                              }
+                            });
+                          },
+                          riveOnInit: (artboard) {
+                            menu.rive.status = RiveUtils.getRiveInput(artboard,
+                                stateMachineName: menu.rive.stateMachineName);
+                          },
+                        ))
+                            .toList(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 24, top: 40, bottom: 16),
+                          child: Text(
+                            "Account".toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: Colors.white70),
+                          ),
+                        ),
 
-                      ...sidebarMenus2
-                          .map((menu) => SideMenu(
-                        menu: menu,
-                        selectedMenu: selectedSideMenu,
-                        press: () {
-                          RiveUtils.chnageSMIBoolState(menu.rive.status!);
-                          setState(() {
-                            selectedSideMenu = menu;
-                            AuthentificationRepository.instance.logout();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const OnboardingScreen(),
-                              ),
-                            );
-                          });
+                        ...sidebarMenus2
+                            .map((menu) => SideMenu(
+                          menu: menu,
+                          selectedMenu: selectedSideMenu,
+                          press: () {
+                            RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                            setState(() {
+                              selectedSideMenu = menu;
+                              AuthentificationRepository.instance.logout();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OnboardingScreen(),
+                                ),
+                              );
+                            });
 
-                        },
-                        riveOnInit: (artboard) {
-                          menu.rive.status = RiveUtils.getRiveInput(artboard,
-                              stateMachineName: menu.rive.stateMachineName);
-                        },
-                      ))
-                          .toList(),
+                          },
+                          riveOnInit: (artboard) {
+                            menu.rive.status = RiveUtils.getRiveInput(artboard,
+                                stateMachineName: menu.rive.stateMachineName);
+                          },
+                        ))
+                            .toList(),
 
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -311,7 +299,9 @@ class _EntryPointState extends State<EntryPoint>
                       press: () {
                         RiveUtils.chnageSMIBoolState(navBar.rive.status!);
                         updateSelectedBtmNav(navBar);
-                        updateSelectedSideNav(sidebarMenus[index]);
+                        if (index != 3){
+                          updateSelectedSideNav(sidebarMenus[index]);
+                        }
                         switch (index){
                           case 0 : pageIndex = 0;break;
                           case 1 : pageIndex = 1;break;

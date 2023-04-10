@@ -12,6 +12,7 @@ import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
 import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
 import 'package:projet_fin_annee_2gt/model/messages_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
+import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
 import 'package:rive/rive.dart';
 
 class TechnicalScreen extends StatefulWidget {
@@ -105,11 +106,11 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                 // Send data to firestore
                   //create new discussion
                   final discussion = DiscussionModel(
-                    type: "Technical",
+                    type: "Technical Request",
                     lastMessage: _ReclamationController.value.text.trim(),
                     lastMessageDate: DateTime.now(),
-                    lastMessageStatusAdmin: "not seen",
-                    lastMessageStatusUser: "seen",
+                    isLastMessageSeenByAdmin: false,
+                    isLastMessageSeenUser: true,
                     phoneNo: userData.phoneNo,
                     userId: userData.id.toString(),
                     generation: generation,
@@ -141,6 +142,13 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                               // Navigate & hide confetti
                               Future.delayed(const Duration(seconds: 1), () {
                                 // ................do something
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ChatScreen(),
+                                  ),
+                                );
+
                               });
                             },
                           );

@@ -82,8 +82,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Column(
+                child: Flex(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  direction: Axis.vertical,
                   children: [
                     const Spacer(),
                     SizedBox(
@@ -160,11 +161,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Text(
-                          "Your privacy and security are our top priorities.We will never share your personal information with third parties."),
-                    )
+
+                    SizedBox(height: 20,),
+                    Text(
+                        "Your privacy and security are our top priorities.We will never share your personal information with third parties."),
+                    Spacer(),
+
                   ],
                 ),
               ),

@@ -37,11 +37,7 @@ List<Menu> sidebarMenus = [
     index: 2,
   ),
 
-  Menu(
-    index: 3,
-    rive: RiveModel(src: '', artboard: '', stateMachineName: ''),
-    title: '',
-  ),
+
 ];
 
 List<Menu> sidebarMenus2 = [

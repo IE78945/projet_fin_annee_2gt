@@ -5,8 +5,8 @@ class DiscussionModel {
   final String type;
   final String lastMessage;
   final DateTime lastMessageDate;
-  final String lastMessageStatusAdmin;
-  final String lastMessageStatusUser;
+  final bool isLastMessageSeenByAdmin;
+  final bool isLastMessageSeenUser;
   final String? generation ;
   final String phoneNo;
   final String userId;
@@ -17,8 +17,8 @@ class DiscussionModel {
     required this.type,
     required this.lastMessage,
     required this.lastMessageDate,
-    required this.lastMessageStatusAdmin,
-    required this.lastMessageStatusUser,
+    required this.isLastMessageSeenByAdmin,
+    required this.isLastMessageSeenUser,
     this.generation,
     required this.phoneNo,
     required this.userId,
@@ -29,8 +29,8 @@ class DiscussionModel {
       "Type" : type,
       "LastMessage" : lastMessage,
       "LastMessageDate" : lastMessageDate,
-      "LastMessageStatusAdmin" : lastMessageStatusAdmin,
-      "LastMessageStatusUser" : lastMessageStatusUser,
+      "LastMessageStatusAdmin" : isLastMessageSeenByAdmin,
+      "LastMessageStatusUser" : isLastMessageSeenUser,
       "Generation" : generation,
       "Phone" : phoneNo,
       "UserId" : userId,
@@ -46,8 +46,8 @@ class DiscussionModel {
         type: data["Type"],
         lastMessage: data["LastMessage"],
         lastMessageDate: data["LastMessageDate"].toDate(),
-        lastMessageStatusAdmin: data["LastMessageStatusAdmin"],
-        lastMessageStatusUser: data["LastMessageStatusUser"],
+        isLastMessageSeenByAdmin: data["LastMessageStatusAdmin"],
+        isLastMessageSeenUser: data["LastMessageStatusUser"],
         generation: data["Generation"],
         phoneNo: data["Phone"],
         userId: data["UserId"],

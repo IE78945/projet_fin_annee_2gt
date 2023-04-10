@@ -99,6 +99,13 @@ class _SignInFormState extends State<SignInForm> {
                       _PasswordController.text.trim());
 
                   if (await isLoggedIn) {
+                    /*-------------------------Missing Code------------------------------------*/
+                    //get user phone number and test it with the number passed in truecaller
+                        // if phone numbers are the same
+                            //show success animation and pass user to entry point
+                        // else logout user and show failuare animation
+                    /*-----------------------------------------------------------------------------*/
+
                     // show success animation
                     success.fire();
                     Future.delayed(
@@ -300,9 +307,10 @@ class _SignInFormState extends State<SignInForm> {
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      //signIn(context);
+                      signIn(context);
 
 
+                      /*
                       /*------------------------Just For Test -------------------*/
                       // login user in firebase
                       Future<bool> isLoggedIn;
@@ -338,6 +346,7 @@ class _SignInFormState extends State<SignInForm> {
                         );
                       }
                       /*---------------------------------------------------------*/
+                       */
 
                     },
                     style: ElevatedButton.styleFrom(

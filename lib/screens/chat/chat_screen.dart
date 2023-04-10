@@ -20,11 +20,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   final _authRepo = Get.put(AuthentificationRepository());
-  final _userRepo = Get.put(UserRepository());
   final _chatRepo = Get.put(ChatRepository());
 
-  late double _height ;
-  late double _width;
 
   getUserUid(){
     final uid = _authRepo.firebaseUser.value?.uid;
@@ -35,8 +32,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height * 0.75;
-    _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -55,8 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                     padding: EdgeInsets.only(right: 20,left: 20),
                       child: Container(
-                        height: _height,
-                        width: _width,
+
                         child: _conversationsListViewWidget(),
                       ),
                 ),
@@ -72,8 +66,6 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context) {
           getUserUid();
           return Container(
-            height: _height,
-            width: _width,
             child: StreamBuilder<List<DiscussionModel>>(
                 stream: _chatRepo.getUserDiscussion(getUserUid()),
                 builder: (context, snapshot) {
@@ -85,17 +77,21 @@ class _ChatScreenState extends State<ChatScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Card(
-                          color: Color(0xFF6792FF),
+                          //color: Color(0xFF6792FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(color:Color(0xFF6792FF), width: 2),
+                            side: BorderSide(color:Colors.black, width: 2),
                           ),
                           child: ListTile(
                             textColor: Colors.white,
                             onTap: () {},
-                            title: Text(_data![_index].type),
-                            subtitle: Text(_data![_index].lastMessage),
-                            trailing: _listTileTrailingWidgets(_data![_index].lastMessageDate),
+                            title: Text(_data![_index].type,style:TextStyle(color: Colors.black,),),
+                            subtitle: Text(
+                                _data![_index].lastMessage,
+                                style:TextStyle(color: Colors.black,),
+                                maxLines: 1,
+                            ),
+                            trailing: _listTileTrailingWidgets(_data![_index].lastMessageDate,_data![_index].isLastMessageSeenUser),
                           ),
                         ),
                       );
@@ -109,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
 
-  Widget _listTileTrailingWidgets(DateTime _lastMessageTimestamp) {
+  Widget _listTileTrailingWidgets(DateTime _lastMessageTimestamp , bool _iSeenByUser ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
@@ -117,16 +113,17 @@ class _ChatScreenState extends State<ChatScreen> {
       children: <Widget>[
         Text(
           timeago.format(_lastMessageTimestamp),
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 15 , color: Colors.black),
         ),
-       Container(
-         height: 12,
-         width: 12,
-         decoration:  BoxDecoration(
-           color: Colors.lightBlueAccent,
-           borderRadius: BorderRadius.circular(100),
-         ),
-       )
+        if (_iSeenByUser == false)
+           Container(
+             height: 12,
+             width: 12,
+             decoration:  BoxDecoration(
+               color: Colors.lightBlueAccent,
+               borderRadius: BorderRadius.circular(100),
+             ),
+           )
       ],
     );
   }
