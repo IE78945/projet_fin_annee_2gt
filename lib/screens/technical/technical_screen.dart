@@ -307,12 +307,12 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
         bottom: false,
         child: Stack(
           children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 40),
-                  Padding(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 40),
+                Container(
+                  child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Text(
                       "Technical Services",
@@ -320,7 +320,9 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Form(
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
                     key: _formKey,
                     child: Column(
                       children: [
@@ -428,19 +430,20 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            cellInfo.toString(),
+                          ),
+                        ),
+                        SizedBox(height: 60),
                       ],
                     ),
                   ),
+                ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      cellInfo.toString(),
-                    ),
-                  ),
-                  SizedBox(height: 60),
-                ],
-              ),
+
+              ],
             ),
             isShowLoading
                 ? CustomPositioned(
