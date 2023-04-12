@@ -10,6 +10,7 @@ class DiscussionModel {
   final String? generation ;
   final String phoneNo;
   final String userId;
+  final String? issue;
 
 
   const DiscussionModel({
@@ -22,6 +23,7 @@ class DiscussionModel {
     this.generation,
     required this.phoneNo,
     required this.userId,
+    this.issue,
   });
 
   toJason(){
@@ -34,6 +36,7 @@ class DiscussionModel {
       "Generation" : generation,
       "Phone" : phoneNo,
       "UserId" : userId,
+      "Issue" : issue,
     };
   }
 
@@ -51,6 +54,7 @@ class DiscussionModel {
         generation: data["Generation"],
         phoneNo: data["Phone"],
         userId: data["UserId"],
+        issue: data["Issue"],
       );
     } catch(e){
       print("Error creating DiscussionModel from snapshot: $e");

@@ -33,8 +33,10 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
   final _SimList = ["SIM 1" , "SIM 2"];
   String _selectedSIM = "SIM 1";
-  final _IssueList = ["2G (GSM)" , "3G (CDMA)" , "4G (LTE)"];
-  String _selectedIssue = "2G (GSM)";
+  final _GenerationList = ["2G (GSM)" , "3G (CDMA)" , "4G (LTE)"];
+  String _selectedGeneration = "2G (GSM)";
+  final _IssuesList = ["coverage" , "debit" , "quality"];
+  String _selectedIssue = "coverage";
   Map<String,String> cellInfo = new Map<String, String>();
   String generation ="";
   static const CellInfoChannel = MethodChannel('com.example.projet_fin_annee_2gt/cell_info');
@@ -115,7 +117,8 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                     isLastMessageSeenUser: true,
                     phoneNo: userData.phoneNo,
                     userId: userData.id.toString(),
-                    generation: generation,
+                    generation: _selectedGeneration,
+                    issue: _selectedIssue,
                   );
                   String DiscussionID = await _chatRepo.createDiscussion(discussion);
                   //if user data has been stored in firestore successfully
@@ -290,12 +293,14 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
     final Map<dynamic,dynamic> newCellInfo = await CellInfoChannel.invokeMethod("getCellInfo",arguments);
     setState(() {
       cellInfo = newCellInfo.cast<String, String>() ;
-      generation = newCellInfo['phoneType'];
+      //generation = newCellInfo['phoneType'];
     });
   }
 
   _TechnicalScreenState(){
     _selectedSIM = _SimList[0];
+    _selectedGeneration = _GenerationList[0];
+    _selectedIssue = _IssuesList[0];
   }
 
 
@@ -323,121 +328,149 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.all(20),
-                            child: FutureBuilder(
-                              future: getUserData(),
-                              builder: (context,snapshot){
-                                if (snapshot.connectionState == ConnectionState.done){
-                                  if (snapshot.hasData){
-                                    UserModel userData = snapshot.data as UserModel;
-                                    return Text(
-                                      "Please choose your SIM corresponding to your phone number "+userData.phoneNo,
-                                      textAlign: TextAlign.center,
-                                    );
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.all(20),
+                              child: FutureBuilder(
+                                future: getUserData(),
+                                builder: (context,snapshot){
+                                  if (snapshot.connectionState == ConnectionState.done){
+                                    if (snapshot.hasData){
+                                      UserModel userData = snapshot.data as UserModel;
+                                      return Text(
+                                        "Please choose your SIM corresponding to your phone number "+userData.phoneNo,
+                                        textAlign: TextAlign.center,
+                                      );
+                                    }
                                   }
+                                  return Text(
+                                  "Please choose your SIM corresponding to your phone number",
+                                  textAlign: TextAlign.center,
+                                  );
                                 }
-                                return Text(
-                                "Please choose your SIM corresponding to your phone number",
-                                textAlign: TextAlign.center,
-                                );
-                              }
-                            ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: DropdownButtonFormField(
-                            value: _selectedSIM,
-                            items: _SimList.map(
-                                    (e) =>DropdownMenuItem(child: Text(e), value: e,)
-                            ).toList(),
-                            onChanged: (val){
-                              setState(() {
-                                _selectedSIM = val as String;
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.arrow_drop_down_outlined,
-                              color: Color(0xFF6792FF),
-                            ),
+                              ),
                           ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Text(
-                              "Please select Your connectivity issue",
-                              textAlign: TextAlign.center,
-                            )
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: DropdownButtonFormField(
-                            value: _selectedIssue,
-                            items: _IssueList.map(
-                                    (e) =>DropdownMenuItem(child: Text(e), value: e,)
-                            ).toList(),
-                            onChanged: (val){
-                              setState(() {
-                                _selectedIssue = val as String;
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.arrow_drop_down_outlined,
-                              color: Color(0xFF6792FF),
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.only(right: 20,left: 20),
-                          child: TextFormField(
-                            maxLines:10,
-                            keyboardType: TextInputType.multiline,
-                            controller: _ReclamationController,
-                            validator: (value) {
-                              if (value!.isEmpty ) {
-                                return "Please enter a your reclamation";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: ElevatedButton(
-                            child: Text("Send"),
-                            onPressed: () {
-                              send(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF6792FF),
-                              minimumSize: const Size(double.infinity, 56),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(25),
-                                  bottomRight: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25),
-                                ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: DropdownButtonFormField(
+                              value: _selectedSIM,
+                              items: _SimList.map(
+                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                              ).toList(),
+                              onChanged: (val){
+                                setState(() {
+                                  _selectedSIM = val as String;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Color(0xFF6792FF),
                               ),
                             ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                "Please select the generation",
+                                textAlign: TextAlign.center,
+                              )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: DropdownButtonFormField(
+                              value: _selectedGeneration,
+                              items: _GenerationList.map(
+                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                              ).toList(),
+                              onChanged: (val){
+                                setState(() {
+                                  _selectedGeneration = val as String;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Color(0xFF6792FF),
+                              ),
+                            ),
+                          ),
 
+                          Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                "Please select Your issue",
+                                textAlign: TextAlign.center,
+                              )
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            cellInfo.toString(),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: DropdownButtonFormField(
+                              value: _selectedIssue,
+                              items: _IssuesList.map(
+                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                              ).toList(),
+                              onChanged: (val){
+                                setState(() {
+                                  _selectedIssue = val as String;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_drop_down_outlined,
+                                color: Color(0xFF6792FF),
+                              ),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 60),
-                      ],
+
+                          Padding(
+                            padding: EdgeInsets.only(right: 20,left: 20),
+                            child: TextFormField(
+                              maxLines:10,
+                              keyboardType: TextInputType.multiline,
+                              controller: _ReclamationController,
+                              validator: (value) {
+                                if (value!.isEmpty ) {
+                                  return "Please enter a your reclamation";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton(
+                              child: Text("Send"),
+                              onPressed: () {
+                                send(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF6792FF),
+                                minimumSize: const Size(double.infinity, 56),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(25),
+                                    bottomRight: Radius.circular(25),
+                                    bottomLeft: Radius.circular(25),
+                                  ),
+                                ),
+                              ),
+
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Text(
+                              cellInfo.toString(),
+                            ),
+                          ),
+                          SizedBox(height: 60),
+                        ],
+                      ),
                     ),
                   ),
                 ),
