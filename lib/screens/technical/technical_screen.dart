@@ -33,6 +33,8 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
   final _SimList = ["SIM 1" , "SIM 2"];
   String _selectedSIM = "SIM 1";
+  final _IssueList = ["2G (GSM)" , "3G (CDMA)" , "4G (LTE)"];
+  String _selectedIssue = "2G (GSM)";
   Map<String,String> cellInfo = new Map<String, String>();
   String generation ="";
   static const CellInfoChannel = MethodChannel('com.example.projet_fin_annee_2gt/cell_info');
@@ -362,7 +364,33 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                           ),
                         ),
                         Padding(
-                            padding: EdgeInsets.only(right: 20,left: 20),
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              "Please select Your connectivity issue",
+                              textAlign: TextAlign.center,
+                            )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: DropdownButtonFormField(
+                            value: _selectedIssue,
+                            items: _IssueList.map(
+                                    (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                            ).toList(),
+                            onChanged: (val){
+                              setState(() {
+                                _selectedIssue = val as String;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Color(0xFF6792FF),
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(right: 20,left: 20),
                           child: TextFormField(
                             maxLines:10,
                             keyboardType: TextInputType.multiline,

@@ -13,17 +13,20 @@ class _CommercialScreenState extends State<CommercialScreen> {
     return Scaffold(
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
-          child: Column(
+        child:SingleChildScrollView(
+          child:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  "Commercial Services",
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    "Commercial Services",
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
