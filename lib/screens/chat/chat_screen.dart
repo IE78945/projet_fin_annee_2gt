@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       );
                     },
-                  ) : Text("No data");
+                  ) :const Center(child: CircularProgressIndicator(),);
                 }
             ),
           );
