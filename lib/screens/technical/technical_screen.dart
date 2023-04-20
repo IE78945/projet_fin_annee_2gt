@@ -12,7 +12,6 @@ import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
 import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
 import 'package:projet_fin_annee_2gt/model/messages_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
-import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
 import 'package:rive/rive.dart';
 
 class TechnicalScreen extends StatefulWidget {
@@ -333,7 +332,7 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                       child: Column(
                         children: [
                           Padding(
-                              padding: EdgeInsets.all(20),
+                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
                               child: FutureBuilder(
                                 future: getUserData(),
                                 builder: (context,snapshot){
@@ -372,9 +371,9 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                             ),
                           ),
                           Padding(
-                              padding: EdgeInsets.all(20),
+                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
                               child: Text(
-                                "Please select the generation",
+                                "Please select the generation wich you have a problem with",
                                 textAlign: TextAlign.center,
                               )
                           ),
@@ -398,9 +397,9 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                           ),
 
                           Padding(
-                              padding: EdgeInsets.all(20),
+                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
                               child: Text(
-                                "Please select Your issue",
+                                "Please select your issue type",
                                 textAlign: TextAlign.center,
                               )
                           ),
@@ -422,9 +421,15 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                               ),
                             ),
                           ),
-
                           Padding(
-                            padding: EdgeInsets.only(right: 20,left: 20),
+                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
+                              child: Text(
+                                "Please enter a your reclamation",
+                                textAlign: TextAlign.center,
+                              )
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(20),
                             child: TextFormField(
                               maxLines:10,
                               keyboardType: TextInputType.multiline,
@@ -462,12 +467,6 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
 
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              cellInfo.toString(),
-                            ),
-                          ),
                           SizedBox(height: 60),
                         ],
                       ),
@@ -480,22 +479,22 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
             ),
             isShowLoading
                 ? CustomPositioned(
-              child: RiveAnimation.asset(
-                'assets/RiveAssets/check.riv',
-                fit: BoxFit.cover,
-                onInit: _onCheckRiveInit,
-              ),
-            )
+                  child: RiveAnimation.asset(
+                    'assets/RiveAssets/check.riv',
+                    fit: BoxFit.cover,
+                    onInit: _onCheckRiveInit,
+                  ),
+                )
                 : const SizedBox(),
             isShowConfetti
                 ? CustomPositioned(
-              scale: 6,
-              child: RiveAnimation.asset(
-                "assets/RiveAssets/confetti.riv",
-                onInit: _onConfettiRiveInit,
-                fit: BoxFit.cover,
-              ),
-            )
+                  scale: 6,
+                  child: RiveAnimation.asset(
+                    "assets/RiveAssets/confetti.riv",
+                    onInit: _onConfettiRiveInit,
+                    fit: BoxFit.cover,
+                  ),
+                )
                 : const SizedBox(),
           ],
         ),

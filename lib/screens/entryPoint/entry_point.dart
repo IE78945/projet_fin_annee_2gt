@@ -191,6 +191,13 @@ class _EntryPointState extends State<EntryPoint>
                             setState(() {
                               selectedSideMenu = menu;
                               AuthentificationRepository.instance.logout();
+                              Get.snackbar(
+                                "success",
+                                "Logged out successfully",
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Colors.white.withOpacity(0.7),
+                                colorText: Colors.green,
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -306,15 +313,23 @@ class _EntryPointState extends State<EntryPoint>
                           case 0 : pageIndex = 0;break;
                           case 1 : pageIndex = 1;break;
                           case 2 : pageIndex = 2;break;
-                          case 3 :  {AuthentificationRepository.instance.logout();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OnboardingScreen(),
-                            ),
-                          );
-                          };break;
-                          default: print ("Noooooooooooooooooooooooooooooooo");break;
+                          case 3 :  {
+                            AuthentificationRepository.instance.logout();
+                            Get.snackbar(
+                              "success",
+                              "Logged out successfully",
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.white.withOpacity(0.7),
+                              colorText: Colors.green,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OnboardingScreen(),
+                              ),
+                            );
+                            };break;
+                            default: print ("");break;
                         }
                       },
                       riveOnInit: (artboard) {

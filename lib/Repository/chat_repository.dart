@@ -30,13 +30,14 @@ class ChatRepository extends GetxController{
 
   // Fetch User discussions in firestore
   Stream<List<DiscussionModel>> getUserDiscussion(String _userId) {
-    var _ref = _db.collection("Chats").where("UserId",isEqualTo: _userId);
+    var _ref = _db.collection("Chats").where("UserId",isEqualTo: _userId).orderBy("LastMessageDate", descending: true);
     return _ref.snapshots().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
             return DiscussionModel.fromSnapshot(doc);
       }).toList();
     });
   }
+
 
 
 }

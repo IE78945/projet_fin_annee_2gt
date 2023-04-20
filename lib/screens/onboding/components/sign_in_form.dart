@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
+import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
+import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
 import 'package:projet_fin_annee_2gt/screens/onboding/components/forgot_password_dialog.dart';
 import 'package:rive/rive.dart';
@@ -21,8 +25,11 @@ class _SignInFormState extends State<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late TextEditingController _PasswordController = TextEditingController();
-  late TextEditingController _phoneController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
+
+  final _authRepo = Get.put(AuthentificationRepository());
+  final _userRepo = Get.put(UserRepository());
+
   bool isShowForgotPasswordDialog = false;
 
   bool _isObscure = true;
@@ -54,8 +61,14 @@ class _SignInFormState extends State<SignInForm> {
     confetti = controller.findInput<bool>("Trigger explosion") as SMITrigger;
   }
 
-  void signIn(BuildContext context) {
+  getUserData(){
+    final email = _authRepo.firebaseUser.value?.email;
+    if (email!= null){
+      return _userRepo.getUserDetails(email);
+    }
+  }
 
+  void signIn(BuildContext context) {
     // confetti.fire();
     setState(() {
       isShowConfetti = true;
@@ -85,51 +98,85 @@ class _SignInFormState extends State<SignInForm> {
             //If Truecaller user and has Truecaller app on his device, you'd directly get the Profile
               case TruecallerSdkCallbackResult.success:
                 {
-                    String firstName = truecallerSdkCallback.profile!.firstName;
-                  String? lastName = truecallerSdkCallback.profile!.lastName;
                   //Get device phone number
-                  String phNo = truecallerSdkCallback.profile!.phoneNumber;
-                  print("**********************************firstName: " +
-                      firstName + "\t phNO:" + phNo);
+                  String trueCallerPhoneNumber = truecallerSdkCallback.profile!.phoneNumber;
 
                   // login user in firebase
                   Future<bool> isLoggedIn;
-                  isLoggedIn = AuthentificationRepository.instance
-                      .LoginUserWithEmailAndPassword(_emailController.text.trim(),
-                      _PasswordController.text.trim());
+                  isLoggedIn = AuthentificationRepository.instance.LoginUserWithEmailAndPassword(_emailController.text.trim(), _PasswordController.text.trim());
 
                   if (await isLoggedIn) {
-                    /*-------------------------Missing Code------------------------------------*/
                     //get user phone number and test it with the number passed in truecaller
+                    UserModel user = await getUserData();
+                    var dataBasePhoneNumber = user.phoneNo.toString().trim();
                         // if phone numbers are the same
-                            //show success animation and pass user to entry point
+                        //show success animation and pass user to entry point
+                        if  (dataBasePhoneNumber == trueCallerPhoneNumber) { // show success animation
+                          success.fire();
+                          Get.snackbar(
+                            "success",
+                            "Logged in successfully",
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.white.withOpacity(0.7),
+                            colorText: Colors.green,
+                          );
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                                () {
+                              setState(() {
+                                isShowLoading = false;
+                              });
+                              confetti.fire();
+                              // Navigate & hide confetti
+                              Future.delayed(const Duration(seconds: 1), () {
+                                // Navigator.pop(context);
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const EntryPoint(),
+                                  ),
+                                );
+                              });
+                            },
+                          );
+                        }
                         // else logout user and show failuare animation
+                        else {
+                          _authRepo.logout();
+                          Get.snackbar(
+                            "Error",
+                            "Opps!! Seems that the selected phone number dosen't match the one of your account.",
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.white.withOpacity(0.7),
+                            colorText: Colors.red,
+                          );
+                          // show failure animation
+                          error.fire();
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                                () {
+                              setState(() {
+                                isShowLoading = false;
+                              });
+                              reset.fire();
+                            },
+                          );
+
+                        }
                     /*-----------------------------------------------------------------------------*/
 
-                    // show success animation
-                    success.fire();
-                    Future.delayed(
-                      const Duration(seconds: 2),
-                          () {
-                        setState(() {
-                          isShowLoading = false;
-                        });
-                        confetti.fire();
-                        // Navigate & hide confetti
-                        Future.delayed(const Duration(seconds: 1), () {
-                          // Navigator.pop(context);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EntryPoint(),
-                            ),
-                          );
-                        });
-                      },
-                    );
                   }
                   else {
+                    // Can't sign in user
+                    Get.snackbar(
+                      "Error",
+                      "Your email or password is incorrect, please verify your information.",
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: Colors.white.withOpacity(0.7),
+                      colorText: Colors.red,
+                    );
                     // show failure animation
                     error.fire();
                     Future.delayed(
@@ -149,8 +196,7 @@ class _SignInFormState extends State<SignInForm> {
                 {
                   String errorCode = truecallerSdkCallback.error!.message
                       .toString();
-                  print("--------------------------------NO!" +
-                      errorCode.toString());
+                  print("TruecallerSdkCallbackResult.failure: " + errorCode.toString());
                   error.fire();
                   Future.delayed(
                     const Duration(seconds: 2),
@@ -165,7 +211,7 @@ class _SignInFormState extends State<SignInForm> {
                 break;
 
               default:
-                print("Invalid result 2 ");
+                print("Invalid result True Caller ");
             }
           });
 
@@ -307,47 +353,7 @@ class _SignInFormState extends State<SignInForm> {
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      //signIn(context);
-
-
-
-                      /*------------------------Just For Test -------------------*/
-                      // login user in firebase
-                      Future<bool> isLoggedIn;
-                      isLoggedIn = AuthentificationRepository.instance
-                          .LoginUserWithEmailAndPassword(_emailController.text.trim(),
-                          _PasswordController.text.trim());
-
-                      if (await isLoggedIn) {
-                        Future.delayed(
-                          const Duration(seconds: 2),
-                              () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const EntryPoint(),
-                                  ),
-                                );
-
-                          },
-                        );
-                      }
-                      else {
-                        // show failure animation
-                        error.fire();
-                        Future.delayed(
-                          const Duration(seconds: 2),
-                              () {
-                            setState(() {
-                              isShowLoading = false;
-                            });
-                            reset.fire();
-                          },
-                        );
-                      }
-                      /*---------------------------------------------------------*/
-
-
+                      signIn(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF77D8E),
