@@ -45,6 +45,7 @@ dependencies:
   permission_handler: ^10.2.0
   geolocator: ^9.0.2
   timeago: ^3.3.0
+  flutter_native_splash: ^2.2.19
 
 
 
@@ -58,6 +59,21 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flutter_native_splash :
+  color : "#f7f6f1"
+  color_dark : "#272727"
+  image : assets/images/Logo.png
+  image_dark : assets/images/Logo.png
+
+  android_12:
+    image: assets/images/Logo.png
+    icon_background_color: "#f7f6f1"
+    image_dark: assets/images/Logo.png
+    icon_background_color_dark: "#272727"
+
+    web: false
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -74,6 +90,7 @@ flutter:
     - assets/avaters/
     - assets/Backgrounds/
     - assets/icons/
+    - assets/images/
     - assets/RiveAssets/
   #   - images/a_dot_ham.jpeg
 
