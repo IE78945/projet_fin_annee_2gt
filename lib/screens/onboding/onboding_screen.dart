@@ -123,6 +123,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 setState(() {
                                   isShowSignInDialog = true;
                                 });
+
+
                                 showSignInCustomDialog(
                                   context,
                                   onValue: (_) {
@@ -131,6 +133,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     });
                                   },
                                 );
+
+
                               },
                             );
                           },
