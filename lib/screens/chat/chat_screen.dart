@@ -4,10 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/chat_repository.dart';
-import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
-import 'package:projet_fin_annee_2gt/constants.dart';
 import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
-import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatScreen extends StatefulWidget {
@@ -82,11 +79,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Card(
-                          //color: Color(0xFF6792FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side: BorderSide(color:Colors.black, width: 2),
                           ),
+                          elevation: 5,
+                          shadowColor: Colors.grey,
                           child: ListTile(
                             textColor: Colors.white,
                             onTap: () {},
