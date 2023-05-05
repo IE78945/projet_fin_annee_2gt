@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
+import 'package:projet_fin_annee_2gt/constants.dart';
 import 'package:projet_fin_annee_2gt/model/discussions_model.dart';
 import 'package:projet_fin_annee_2gt/model/messages_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
@@ -213,21 +214,38 @@ class _CommercialScreenState extends State<CommercialScreen> {
                     child: Form(
                       key: _formKey,
                       child: Column(
+                        crossAxisAlignment: ,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 20,left: 20),
-                            child: TextFormField(
-                              maxLines:10,
-                              keyboardType: TextInputType.multiline,
-                              controller: _ReclamationController,
-                              validator: (value) {
-                                if (value!.isEmpty ) {
-                                  return "Please enter a your reclamation";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
+                            child: Text(
+                              "Please enter your reclamation ",
+                              //textAlign: TextAlign.left,
+                              style: ReclamationTextStyle,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 20,left: 20),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: BorderSide(color:Colors.black, width: 2),
+                              ),
+                              elevation: 5,
+                              shadowColor: Colors.grey,
+                              child: TextFormField(
+                                maxLines:14,
+                                keyboardType: TextInputType.multiline,
+                                controller: _ReclamationController,
+                                validator: (value) {
+                                  if (value!.isEmpty ) {
+                                    return "Please enter a your reclamation";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
 
+                                ),
                               ),
                             ),
                           ),
@@ -239,7 +257,8 @@ class _CommercialScreenState extends State<CommercialScreen> {
                                 send(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF6792FF),
+                                elevation: 5,
+                                backgroundColor: Mypink,
                                 minimumSize: const Size(double.infinity, 56),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(

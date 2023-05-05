@@ -7,3 +7,10 @@ const Color shadowColorLight = Color(0xFF4A5367);
 const Color shadowColorDark = Colors.black;
 
 const Color Mypink = Color(0xFFF77D8E);
+
+
+const TextStyle ReclamationTextStyle = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold
+
+);
