@@ -1,188 +1,178 @@
 import 'package:flutter/material.dart';
-import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet_fin_annee_2gt/constants.dart';
-import 'package:projet_fin_annee_2gt/screens/EntryPoint/EntryPoint.dart';
-import 'package:projet_fin_annee_2gt/screens/OnBoardingScreens/model_onbording.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../EntryPoint/EntryPoint.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  OnBoardingScreen({Key? key}) : super(key: key);
+  const OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  final LiquidController controller = LiquidController();
+  late PageController _pageController;
+  int _pageIndex = 0;
 
-  int currentPage = 0;
+
+  @override
+  void initState(){
+    _pageController = PageController(initialPage: 0);
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final pages = [
-      OnBoardingPageWidget(
-        model: OnBoardingModel(
-          image: tOnBoardingImage1,
-          title: tOnBoardingTitle1,
-          subTitle: tOnBoardingSubTitle1,
-          counterText: tOnBoardingCounter1,
-          height: size.height,
-          bgcolor: tOnBoardingPage1Color,
-        ),
-      ),
-      OnBoardingPageWidget(
-        model: OnBoardingModel(
-          image: tOnBoardingImage2,
-          title: tOnBoardingTitle2,
-          subTitle: tOnBoardingSubTitle2,
-          counterText: tOnBoardingCounter2,
-          height: size.height,
-          bgcolor: tOnBoardingPage2Color,
-        ),
-      ),
-      OnBoardingPageWidget(
-        model: OnBoardingModel(
-          image: tOnBoardingImage3,
-          title: tOnBoardingTitle3,
-          subTitle: tOnBoardingSubTitle3,
-          counterText: tOnBoardingCounter3,
-          height: size.height,
-          bgcolor: tOnBoardingPage3Color,
-        ),
-      ),
-    ];
-
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          LiquidSwipe(
-            pages: pages,
-            enableSideReveal: true,
-            liquidController: controller,
-            onPageChangeCallback: onPageChangedCallback,
-            slideIconWidget: Icon(Icons.arrow_back_ios),
-          ),
-          Positioned(
-            bottom: 60.0,
-            child: OutlinedButton(
-              onPressed: () {
-                if (controller.currentPage==2) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EntryPoint()),
-                  );
-                }
-                else {
-                  int nextPage = controller.currentPage + 1;
-                  controller.animateToPage(page: nextPage);
-                }
-
-              },
-              style: ElevatedButton.styleFrom(
-                side: const BorderSide(color: Colors.black26),
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(20),
-                foregroundColor: Colors.white,
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Color(0xff272727),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.arrow_forward_ios),
-              ),
-            ),
-          ),
-          if (controller.currentPage!=2) // if we are not at the final page display skip text button
-            Positioned(
-              top: 50,
-              right: 20,
-              child: TextButton(
-                onPressed: () => controller.jumpToPage(page: 2),
-                child: const Text(
-                  'skip',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ),
-          Positioned(
-            bottom: 10,
-            child: AnimatedSmoothIndicator(
-              activeIndex: controller.currentPage,
-              count: 3,
-              effect: const WormEffect(
-                activeDotColor: Color(0xff272727),
-                dotHeight: 5.0,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  void onPageChangedCallback(int activePageIndex) {
-    if (controller.currentPage == 2) {
-      // we are on the last page
-      if (activePageIndex == 1) {
-        // user is trying to go to the previous page using slideIconWidget
-        int previousPage = controller.currentPage - 1;
-        controller.animateToPage(page: 1);
-
-        print(currentPage);
-      } else {
-        // user is on the last page and not trying to go to the previous page
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EntryPoint()),
-        );
-      }
-    }
-    else {
-      // user is not on the last page
-      setState(() {});
-    }
-  }
-
-
-
-
-}
-
-class OnBoardingPageWidget extends StatelessWidget {
-  const OnBoardingPageWidget({
-    super.key,
-    required this.model,
-  });
-
-  final OnBoardingModel model;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: model.bgcolor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image(image: AssetImage(model.image),height: model.height*0.4,),
-          Column(
+      body:  SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
-              Text(model.title, style: Theme.of(context).textTheme.displaySmall,),
-              Text(model.subTitle, textAlign: TextAlign.center,),
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+
+                      _pageIndex = index;
+
+                    });
+                  } ,
+                  itemBuilder: (context,index) => OnboardContent(
+                  image: demo_data[index].image,
+                  title: demo_data[index].title,
+                  description: demo_data[index].description,
+                ),),
+              ),
+              Row(
+                children: [
+                  ...List.generate(demo_data.length, (index) => Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: DotIndicator(isActive: index== _pageIndex,),
+                  )),
+                  Spacer(),
+                  SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        if (_pageIndex == demo_data.length - 1) { // check if on the last onboarding screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => EntryPoint()),
+                          );
+                        } else {
+                          _pageController.nextPage(
+                              duration: Duration(milliseconds: 300), curve: Curves.ease);
+                        }
+
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: Mypink, shape: CircleBorder()),
+                      child: SvgPicture.asset("assets/icons/Arrow Right.svg",color: Colors.white,),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-
-          Text(model.counterText,style: Theme.of(context).textTheme.titleSmall,),
-          SizedBox(height: 120.0,),
-        ],
+        )
       ),
     );
   }
 }
 
+class DotIndicator extends StatelessWidget {
+  const DotIndicator({
+    super.key, required this.isActive,
+  });
+
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: isActive? 12:4,
+      width: 4,
+      decoration:  BoxDecoration(
+        color: isActive? Mypink: Mypink.withOpacity(0.4),
+        borderRadius:  BorderRadius.all(Radius.circular(12)),
+      ),
+    );
+  }
+}
+
+class Onboard{
+  final String image,title,description;
+
+  Onboard({
+    required this.image,
+    required this.title,
+    required this.description,
+});
+}
+
+final List<Onboard> demo_data = [
+  Onboard(
+      image: "assets/images/OnBoarding1.png",
+      title: "Easy & Simple",
+      description: "Say goodbye to long wait times and complicated processes.Manage your mobile operator account easily with our app.",
+  ),
+
+  Onboard(
+    image: "assets/images/OnBoarding2.png",
+    title: "Smooth & Hassle-free experience",
+    description: "Our app is designed with the highest standards of quality in mind, ensuring a seamless user experience.",
+  ),
+
+  Onboard(
+    image: "assets/images/OnBoarding3.png",
+    title: "Secure",
+    description: "Our app employs advanced security measures to protect your privacy and safeguard your data.",
+  ),
+
+];
+
+class OnboardContent extends StatelessWidget {
+  const OnboardContent({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.description,
+  });
+
+  final String image,title,description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Spacer(),
+        Image.asset(
+          image,
+          height: 250,
+        ),
+        const Spacer(),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 16),
+        Text(
+          description,
+          textAlign: TextAlign.center,
+          ),
+        const Spacer(),
+      ],
+    );
+  }
+}
