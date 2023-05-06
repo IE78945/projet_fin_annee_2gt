@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
-import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
-import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/Home/Home.dart';
+import 'package:projet_fin_annee_2gt/screens/EntryPoint/EntryPoint.dart';
 import 'package:rive/rive.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
@@ -83,7 +83,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const OnboardingScreen(),
+                      builder: (context) => const EntryPoint(),
                     ),
                   );
 

@@ -9,7 +9,7 @@ import 'package:projet_fin_annee_2gt/constants.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:projet_fin_annee_2gt/screens/chat/chat_screen.dart';
 import 'package:projet_fin_annee_2gt/screens/commercial/commercial_screen.dart';
-import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/EntryPoint/EntryPoint.dart';
 import 'package:projet_fin_annee_2gt/screens/technical/technical_screen.dart';
 import 'package:projet_fin_annee_2gt/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
@@ -19,14 +19,14 @@ import 'components/info_card.dart';
 import 'components/menu_btn.dart';
 import 'components/side_menu.dart';
 
-class EntryPoint extends StatefulWidget {
-  const EntryPoint({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<EntryPoint> createState() => _EntryPointState();
+  State<Home> createState() => _HomeState();
 }
 
-class _EntryPointState extends State<EntryPoint>
+class _HomeState extends State<Home>
     with SingleTickerProviderStateMixin {
   bool isSideBarOpen = false;
 
@@ -201,7 +201,7 @@ class _EntryPointState extends State<EntryPoint>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const OnboardingScreen(),
+                                  builder: (context) => const EntryPoint(),
                                 ),
                               );
                             });
@@ -325,7 +325,7 @@ class _EntryPointState extends State<EntryPoint>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const OnboardingScreen(),
+                                builder: (context) => const EntryPoint(),
                               ),
                             );
                             };break;

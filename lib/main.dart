@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
-import 'package:projet_fin_annee_2gt/screens/onboding/onboding_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/EntryPoint/EntryPoint.dart';
+import 'package:projet_fin_annee_2gt/screens/OnBoardingScreens/onbording_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Repository/user_repository.dart';
 import 'firebase_options.dart';
@@ -16,10 +18,35 @@ Future<void> main() async{
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  bool _isFirstTimeUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFirstTimeUser();
+  }
+
+  Future<void> _checkIfFirstTimeUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstTimeUser = prefs.getBool('isFirstTimeUser') ?? true;
+
+    if (isFirstTimeUser) {
+      print("3-------------------------------------------");
+      setState(() {
+        _isFirstTimeUser = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -38,7 +65,8 @@ class MyApp extends StatelessWidget {
           errorBorder: defaultInputBorder,
         ),
       ),
-      home: const OnboardingScreen(),
+      home: _isFirstTimeUser?OnBoardingScreen(): EntryPoint(),
+
     );
   }
 }

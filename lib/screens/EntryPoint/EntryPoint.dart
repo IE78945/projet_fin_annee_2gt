@@ -9,14 +9,14 @@ import 'components/sign_in_dialog.dart';
 import 'components/sign_up_dialog.dart';
 
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+class EntryPoint extends StatefulWidget {
+  const EntryPoint({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<EntryPoint> createState() => _EntryPointState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _EntryPointState extends State<EntryPoint> {
   late RiveAnimationController _signInBtnAnimationController;
   late RiveAnimationController _signUpBtnAnimationController;
 

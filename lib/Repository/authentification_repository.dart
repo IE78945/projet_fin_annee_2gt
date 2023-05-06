@@ -1,14 +1,11 @@
 
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projet_fin_annee_2gt/firebase_options.dart';
-import '../screens/entryPoint/entry_point.dart';
-import '../screens/onboding/onboding_screen.dart';
+import 'package:projet_fin_annee_2gt/screens/OnBoardingScreens/onbording_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/Home/Home.dart';
+import '../screens/EntryPoint/EntryPoint.dart';
 
 class AuthentificationRepository extends GetxController {
   static AuthentificationRepository get instance => Get.find();
@@ -19,6 +16,8 @@ class AuthentificationRepository extends GetxController {
   var verificationId = ''.obs;
   static bool isFirstTimeOpeningApp = true;
 
+
+
   @override
   void onReady() {
       firebaseUser = Rx<User?>(_auth.currentUser);
@@ -26,12 +25,28 @@ class AuthentificationRepository extends GetxController {
       ever(firebaseUser, _setInitialScreen);
   }
 
-   _setInitialScreen(User? user) {
-    if(isFirstTimeOpeningApp){
-      isFirstTimeOpeningApp = false;
-      user == null ? Get.offAll(() => const OnboardingScreen()) : Get.offAll(() => const EntryPoint());
+   Future _setInitialScreen(User? user) async{
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     bool isFirstTimeUser = prefs.getBool('isFirstTimeUser') ?? true;
 
-    }
+     if (isFirstTimeUser) {
+       print("1---------------------------------------------------------------------");
+       prefs.setBool('isFirstTimeUser', false);
+       Get.offAll(() =>  OnBoardingScreen());
+     }
+     else{
+       print("2---------------------------------------------------------------------");
+       if(isFirstTimeOpeningApp){
+         isFirstTimeOpeningApp = false;
+         user == null ? Get.offAll(() => const EntryPoint()) : Get.offAll(() => const Home());
+
+       }
+     }
+
+  }
+
+  Future<void> _checkIfFirstTimeUser() async {
+
   }
 
   Future<bool> CreateUserWithEmailAndPassword(String email, String password) async {

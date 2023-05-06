@@ -6,7 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
-import 'package:projet_fin_annee_2gt/screens/entryPoint/entry_point.dart';
+import 'package:projet_fin_annee_2gt/screens/Home/Home.dart';
 import 'package:rive/rive.dart';
 
 import 'package:truecaller_sdk/truecaller_sdk.dart';
@@ -144,7 +144,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const EntryPoint(),
+                              builder: (context) => const Home(),
                             ),
                           );
                         });
