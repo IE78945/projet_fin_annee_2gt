@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:projet_fin_annee_2gt/Repository/authentification_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/chat_repository.dart';
 import 'package:projet_fin_annee_2gt/Repository/user_repository.dart';
@@ -198,15 +197,13 @@ class _CommercialScreenState extends State<CommercialScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      "Commercial Services",
-                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    "Commercial Services",
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Expanded(
@@ -214,9 +211,9 @@ class _CommercialScreenState extends State<CommercialScreen> {
                     child: Form(
                       key: _formKey,
                       child: Column(
-                        crossAxisAlignment: ,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(right: 20,left: 20),
                             child: Text(
                               "Please enter your reclamation ",
@@ -225,11 +222,11 @@ class _CommercialScreenState extends State<CommercialScreen> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: 20,left: 20),
+                            padding: const EdgeInsets.only(right: 20,left: 20),
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(color:Colors.black, width: 2),
+                                side: const BorderSide(color:Colors.black, width: 2),
                               ),
                               elevation: 5,
                               shadowColor: Colors.grey,
@@ -243,7 +240,7 @@ class _CommercialScreenState extends State<CommercialScreen> {
                                   }
                                   return null;
                                 },
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
 
                                 ),
                               ),
@@ -252,7 +249,6 @@ class _CommercialScreenState extends State<CommercialScreen> {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: ElevatedButton(
-                              child: Text("Send"),
                               onPressed: () {
                                 send(context);
                               },
@@ -269,11 +265,12 @@ class _CommercialScreenState extends State<CommercialScreen> {
                                   ),
                                 ),
                               ),
+                              child: const Text("Send"),
 
                             ),
                           ),
 
-                          SizedBox(height: 60),
+                          const SizedBox(height: 60),
                         ],
                       ),
                     ),
