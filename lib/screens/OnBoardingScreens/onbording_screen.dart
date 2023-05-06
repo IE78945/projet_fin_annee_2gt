@@ -39,6 +39,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
+                  physics: _pageIndex == demo_data.length - 1
+                      ? NeverScrollableScrollPhysics()
+                      : AlwaysScrollableScrollPhysics(),
                   onPageChanged: (index) {
                     setState(() {
 
