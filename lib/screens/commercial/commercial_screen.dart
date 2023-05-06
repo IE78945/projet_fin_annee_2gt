@@ -210,20 +210,19 @@ class _CommercialScreenState extends State<CommercialScreen> {
                   child: SingleChildScrollView(
                     child: Form(
                       key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 20,left: 20),
-                            child: Text(
-                              "Please enter your reclamation ",
-                              //textAlign: TextAlign.left,
-                              style: ReclamationTextStyle,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20,left: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 7,bottom: 5),
+                              child: Text(
+                                "Please enter your reclamation ",
+
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20,left: 20),
-                            child: Card(
+                            Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 side: const BorderSide(color:Colors.black, width: 2),
@@ -245,10 +244,8 @@ class _CommercialScreenState extends State<CommercialScreen> {
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ElevatedButton(
+                            const SizedBox(height: 20),
+                            ElevatedButton(
                               onPressed: () {
                                 send(context);
                               },
@@ -268,10 +265,11 @@ class _CommercialScreenState extends State<CommercialScreen> {
                               child: const Text("Send"),
 
                             ),
-                          ),
 
-                          const SizedBox(height: 60),
-                        ],
+
+                            const SizedBox(height: 60),
+                          ],
+                        ),
                       ),
                     ),
                   ),

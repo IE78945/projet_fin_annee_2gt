@@ -14,6 +14,8 @@ import 'package:projet_fin_annee_2gt/model/messages_model.dart';
 import 'package:projet_fin_annee_2gt/model/user_model.dart';
 import 'package:rive/rive.dart';
 
+import '../../constants.dart';
+
 class TechnicalScreen extends StatefulWidget {
   const TechnicalScreen({Key? key}) : super(key: key);
 
@@ -329,131 +331,159 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                   child: SingleChildScrollView(
                     child: Form(
                       key: _formKey,
-                      child: Column(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
-                              child: FutureBuilder(
-                                future: getUserData(),
-                                builder: (context,snapshot){
-                                  if (snapshot.connectionState == ConnectionState.done){
-                                    if (snapshot.hasData){
-                                      UserModel userData = snapshot.data as UserModel;
-                                      return Text(
-                                        "Please choose your SIM corresponding to your phone number "+userData.phoneNo,
-                                        textAlign: TextAlign.center,
-                                      );
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20,left: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only( bottom: 5,left: 7),
+                                child: FutureBuilder(
+                                  future: getUserData(),
+                                  builder: (context,snapshot){
+                                    if (snapshot.connectionState == ConnectionState.done){
+                                      if (snapshot.hasData){
+                                        UserModel userData = snapshot.data as UserModel;
+                                        return Text(
+                                          "Please choose your SIM corresponding to your phone number "+userData.phoneNo,
+                                          textAlign: TextAlign.start,
+                                        );
+                                      }
                                     }
+                                    return Text(
+                                    "Please choose your SIM corresponding to your phone number",
+                                    textAlign: TextAlign.start,
+                                    );
                                   }
-                                  return Text(
-                                  "Please choose your SIM corresponding to your phone number",
-                                  textAlign: TextAlign.center,
-                                  );
-                                }
-                              ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: DropdownButtonFormField(
-                              value: _selectedSIM,
-                              items: _SimList.map(
-                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
-                              ).toList(),
-                              onChanged: (val){
-                                setState(() {
-                                  _selectedSIM = val as String;
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Color(0xFF6792FF),
-                              ),
+                                ),
                             ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
-                              child: Text(
-                                "Please select the generation wich you have a problem with",
-                                textAlign: TextAlign.center,
-                              )
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: DropdownButtonFormField(
-                              value: _selectedGeneration,
-                              items: _GenerationList.map(
-                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
-                              ).toList(),
-                              onChanged: (val){
-                                setState(() {
-                                  _selectedGeneration = val as String;
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Color(0xFF6792FF),
-                              ),
-                            ),
-                          ),
 
-                          Padding(
-                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
-                              child: Text(
-                                "Please select your issue type",
-                                textAlign: TextAlign.center,
-                              )
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: DropdownButtonFormField(
-                              value: _selectedIssue,
-                              items: _IssuesList.map(
-                                      (e) =>DropdownMenuItem(child: Text(e), value: e,)
-                              ).toList(),
-                              onChanged: (val){
-                                setState(() {
-                                  _selectedIssue = val as String;
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_drop_down_outlined,
-                                color: Color(0xFF6792FF),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color:Colors.black, width: 2),
+                              ),
+                              elevation: 5,
+                              shadowColor: Colors.grey,
+                              child: DropdownButtonFormField(
+                                value: _selectedSIM,
+                                items: _SimList.map(
+                                        (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                                ).toList(),
+                                onChanged: (val){
+                                  setState(() {
+                                    _selectedSIM = val as String;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  color: Mypink,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(top: 20, bottom: 5, left: 20,right: 20),
-                              child: Text(
-                                "Please enter a your reclamation",
-                                textAlign: TextAlign.center,
-                              )
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20),
-                            child: TextFormField(
-                              maxLines:10,
-                              keyboardType: TextInputType.multiline,
-                              controller: _ReclamationController,
-                              validator: (value) {
-                                if (value!.isEmpty ) {
-                                  return "Please enter a your reclamation";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
+                            Padding(
+                                padding: EdgeInsets.only(top: 20, bottom: 5, left: 7),
+                                child: Text(
+                                  "Please select the generation wich you have a problem with",
+                                  textAlign: TextAlign.start,
+                                )
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color:Colors.black, width: 2),
+                              ),
+                              elevation: 5,
+                              shadowColor: Colors.grey,
+                              child: DropdownButtonFormField(
+                                value: _selectedGeneration,
+                                items: _GenerationList.map(
+                                        (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                                ).toList(),
+                                onChanged: (val){
+                                  setState(() {
+                                    _selectedGeneration = val as String;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  color: Mypink,
+                                ),
+                              ),
+                            ),
 
+
+                            Padding(
+                                padding: EdgeInsets.only(top: 20, bottom: 5, left: 7),
+                                child: Text(
+                                  "Please select your issue type",
+                                  textAlign: TextAlign.start,
+                                )
+                            ),
+
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color:Colors.black, width: 2),
+                              ),
+                              elevation: 5,
+                              shadowColor: Colors.grey,
+                              child: DropdownButtonFormField(
+                                value: _selectedIssue,
+                                items: _IssuesList.map(
+                                        (e) =>DropdownMenuItem(child: Text(e), value: e,)
+                                ).toList(),
+                                onChanged: (val){
+                                  setState(() {
+                                    _selectedIssue = val as String;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  color: Mypink,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ElevatedButton(
+
+                            Padding(
+                                padding: EdgeInsets.only(top: 20, bottom: 5, left: 7),
+                                child: Text(
+                                  "Please enter a your reclamation",
+                                  textAlign: TextAlign.start,
+                                )
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color:Colors.black, width: 2),
+                              ),
+                              elevation: 5,
+                              shadowColor: Colors.grey,
+                              child: TextFormField(
+                                maxLines:10,
+                                keyboardType: TextInputType.multiline,
+                                controller: _ReclamationController,
+                                validator: (value) {
+                                  if (value!.isEmpty ) {
+                                    return "Please enter a your reclamation";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            ElevatedButton(
                               child: Text("Send"),
                               onPressed: () {
                                 send(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF6792FF),
+                                elevation: 5,
+                                shadowColor: Colors.grey,
+                                backgroundColor: Mypink,
                                 minimumSize: const Size(double.infinity, 56),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
@@ -466,9 +496,10 @@ class _TechnicalScreenState extends State<TechnicalScreen> {
                               ),
 
                             ),
-                          ),
-                          SizedBox(height: 60),
-                        ],
+
+                            SizedBox(height: 80),
+                          ],
+                        ),
                       ),
                     ),
                   ),
